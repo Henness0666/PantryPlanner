@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'Data Models/food_item.dart';
+import 'database.dart';
 
 void main() {
+  // Avoid errors caused by flutter upgrade.
+  // Importing 'package:flutter/widgets.dart' is required.
+  WidgetsFlutterBinding.ensureInitialized();
+  final db = openDatabase('0');
   runApp(MyApp());
 }
 
@@ -22,6 +29,8 @@ class HomeScreen extends StatelessWidget {
   final int totalItems = 150;
   final int lowStockItems = 10;
   final int expiringSoonItems = 5;
+  
+  get dbHelper => null;
 
   @override
   Widget build(BuildContext context) {
@@ -78,60 +87,40 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Welcome to Pantry Planner!',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 32),
-            Text(
-              'Pantry Stats',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Card(
-              child: ListTile(
-                title: Text('Total Items'),
-                trailing: Text(totalItems.toString()),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Low Stock Items'),
-                trailing: Text(lowStockItems.toString()),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Expiring Soon Items'),
-                trailing: Text(expiringSoonItems.toString()),
-              ),
-            ),
-            SizedBox(height: 32),
-            Text(
-              'Alerts',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            // Replace the following Text widgets with actual alerts and low food items
-            ListTile(
-              leading: Icon(Icons.warning, color: Colors.red),
-              title: Text('Alert: Item A is going to expire in 2 days.'),
-            ),
-            ListTile(
-              leading: Icon(Icons.warning, color: Colors.red),
-              title: Text('Alert: Item B is running low.'),
-            ),
-            ListTile(
-              leading: Icon(Icons.warning, color: Colors.red),
-              title: Text('Alert: Item C is going to expire in 1 day.'),
-            ),
-            // Add more alerts as needed
-          ],
+      
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            // Example of adding a new food item to the database
+            final newFoodItem = FoodItem(
+              name: 'Milk',
+              quantity: 1,
+              expiryDate: DateTime.now().add(const Duration(days: 7)), id: 0,
+            );
+            int insertedId = await dbHelper.insertFoodItem(newFoodItem);
+
+            // Example of getting all food items from the database
+            List<FoodItem> allFoodItems = await dbHelper.getAllFoodItems();
+            allFoodItems.forEach((foodItem) {
+              print('Food Item: ${foodItem.name}, Expiry Date: ${foodItem.expiryDate}');
+            });
+
+            // Example of updating a food item in the database
+            final updatedFoodItem = FoodItem(
+              id: insertedId,
+              name: 'Milk',
+              quantity: 2,
+              expiryDate: DateTime.now().add(Duration(days: 14)),
+            );
+            await dbHelper.updateFoodItem(updatedFoodItem);
+
+            // Example of deleting a food item from the database
+            await dbHelper.deleteFoodItem(insertedId);
+
+            // Close the database when it's no longer needed
+            dbHelper.closeDatabase();
+          },
+          child: Text('Perform Database Operations'),
         ),
       ),
     );
@@ -189,3 +178,44 @@ class NutritionAnalysisScreen extends StatelessWidget {
     );
   }
 }
+
+// testDatabase () async {
+
+
+//   // Create a FoodItem and add it to the items table
+//   var fido = FoodItem(
+//     id: 0,
+//     name: 'Bones',
+//     quantity: 35,
+//     expiryDate: DateTime.parse('01/01/2200'),
+//   );
+
+//   await insertFoodItem(fido);
+
+//   // Now, use the method above to retrieve all the items.
+//   if (kDebugMode) {
+//     print(await items());
+//   } // Prints a list that include Fido.
+
+//   // Update Fido's age and save it to the database.
+//   fido = FoodItem(
+//     id: fido.id,
+//     name: fido.name,
+//     quantity: fido.quantity - 5,
+//     expiryDate: fido.expiryDate,
+//   );
+//   await updateFoodItem(fido);
+
+//   // Print the updated results.
+//   if (kDebugMode) {
+//     print(await items());
+//   } // Prints Fido with age 42.
+
+//   // Delete Fido from the database.
+//   await deleteFoodItem(fido.id);
+
+//   // Print the list of items (empty).
+//   if (kDebugMode) {
+//     print(await items());
+//   }
+// }
