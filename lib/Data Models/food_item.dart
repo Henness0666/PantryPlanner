@@ -3,12 +3,14 @@ class FoodItem {
   final String name;
   final int quantity;
   final DateTime expiryDate;
+  final DateTime dateAdded;
 
   FoodItem({
     required this.id,
     required this.name,
     required this.quantity,
     required this.expiryDate,
+    required this.dateAdded,
   });
 
   Map<String, dynamic> toMap() {
@@ -17,6 +19,7 @@ class FoodItem {
       'name': name,
       'quantity': quantity,
       'expiry_date': expiryDate.toIso8601String(),
+      'date_added': dateAdded.toIso8601String(),
     };
   }
 
@@ -34,6 +37,7 @@ class FoodItem {
       name: map['name'],
       quantity: map['quantity'],
       expiryDate: DateTime.parse(map['expiry_date']),
+      dateAdded: DateTime.parse(map['date_added']),
     );
   }
 }

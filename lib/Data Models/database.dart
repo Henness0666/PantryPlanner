@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'Data Models/food_item.dart';
+import 'food_item.dart';
 
 void main() async {
   // Avoid errors caused by flutter upgrade.
@@ -59,6 +59,7 @@ void main() async {
         name: maps[i]['name'],
         quantity: maps[i]['age'],
         expiryDate: DateTime.parse(maps[i]['expiry_date']),
+        dateAdded: DateTime.parse(maps[i]['date_added']),
       );
     });
   }
