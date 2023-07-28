@@ -7,25 +7,25 @@ void main() {
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
   final db = openDatabase('0');
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   int _selectedIndex = 2;
 
   final List<Widget> _widgetOptions = [
-    PantryScreen(), // Pantry Screen
-    ShoppingListScreen(), // Shopping List Screen
-    HomeScreen(), // Home/Dashboard Screen
-    MealPlanningScreen(), // Meal Planning Screen
-    NotificationsScreen(), // Notifications Screen
+    const PantryScreen(), // Pantry Screen
+    const ShoppingListScreen(), // Shopping List Screen
+    const HomeScreen(), // Home/Dashboard Screen
+    const MealPlanningScreen(), // Meal Planning Screen
+    const NotificationsScreen(), // Notifications Screen
   ];
 
   void _onItemTapped(int index) {
