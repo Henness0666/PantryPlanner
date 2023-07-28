@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'home_screen.dart';
-import 'pantry_screen.dart';
-import 'meal_planning_screen.dart';
-import 'shopping_list_screen.dart';
-import 'notifications_screen.dart';
+import '/Screens/home_screen.dart';
+import '/Screens/pantry_screen.dart';
+import '/Screens/meal_planning_screen.dart';
+import '/Screens/shopping_list_screen.dart';
+import '/Screens/notifications_screen.dart';
 import 'food_tracking_screen.dart';
 import 'nutrition_analysis_screen.dart';
 import 'setting_screen.dart';
