@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'Data Models/food_item.dart';
-import 'database.dart';
 
 void main() {
   // Avoid errors caused by flutter upgrade.
@@ -11,7 +10,30 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _selectedIndex = 2;
+
+  final List<Widget> _widgetOptions = [
+    PantryScreen(), // Pantry Screen
+    ShoppingListScreen(), // Shopping List Screen
+    HomeScreen(), // Home/Dashboard Screen
+    MealPlanningScreen(), // Meal Planning Screen
+    NotificationsScreen(), // Notifications Screen
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +41,116 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: Scaffold(
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.kitchen),
+              label: 'Pantry',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Shopping List',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.restaurant_menu),
+              label: 'Meal Plan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Alerts',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          unselectedItemColor:
+              Colors.grey, // Change this color as per your requirement
+          onTap: _onItemTapped,
+        ),
+      ),
+    );
+  }
+}
+
+class PantryScreen extends StatelessWidget {
+  const PantryScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pantry'),
+      ),
+      body: const Center(
+        child: Text(
+          'This is the Pantry screen. Implement your pantry features here!',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+}
+
+class ShoppingListScreen extends StatelessWidget {
+  const ShoppingListScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Shopping List'),
+      ),
+      body: const Center(
+        child: Text(
+          'This is the Shopping List screen. Implement your shopping list features here!',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+}
+
+class MealPlanningScreen extends StatelessWidget {
+  const MealPlanningScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Meal Planning'),
+      ),
+      body: const Center(
+        child: Text(
+          'This is the Meal Planning screen. Implement your meal planning features here!',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+}
+
+class NotificationsScreen extends StatelessWidget {
+  const NotificationsScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notifications'),
+      ),
+      body: const Center(
+        child: Text(
+          'This is the Notifications screen. Implement your notifications features here!',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
     );
   }
 }
@@ -29,20 +160,22 @@ class HomeScreen extends StatelessWidget {
   final int totalItems = 150;
   final int lowStockItems = 10;
   final int expiringSoonItems = 5;
-  
+
+  const HomeScreen({Key? key}) : super(key: key);
+
   get dbHelper => null;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pantry Planner'),
+        title: const Text('Pantry Planner'),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
@@ -52,42 +185,44 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.food_bank),
-              title: Text('Food Tracking'),
+              leading: const Icon(Icons.food_bank),
+              title: const Text('Food Tracking'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FoodTrackingScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const FoodTrackingScreen()),
                 );
               },
             ),
             ListTile(
-              leading: Icon(Icons.kitchen),
-              title: Text('Pantry Management'),
+              leading: const Icon(Icons.kitchen),
+              title: const Text('Pantry Management'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PantryManagementScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const PantryManagementScreen()),
                 );
               },
             ),
             ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Nutrition Analysis'),
+              leading: const Icon(Icons.bar_chart),
+              title: const Text('Nutrition Analysis'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NutritionAnalysisScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const NutritionAnalysisScreen()),
                 );
               },
             ),
           ],
         ),
       ),
-      
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
@@ -95,22 +230,24 @@ class HomeScreen extends StatelessWidget {
             final newFoodItem = FoodItem(
               name: 'Milk',
               quantity: 1,
-              expiryDate: DateTime.now().add(const Duration(days: 7)), id: 0,
+              expiryDate: DateTime.now().add(const Duration(days: 7)),
+              id: 0,
             );
             int insertedId = await dbHelper.insertFoodItem(newFoodItem);
 
             // Example of getting all food items from the database
             List<FoodItem> allFoodItems = await dbHelper.getAllFoodItems();
-            allFoodItems.forEach((foodItem) {
-              print('Food Item: ${foodItem.name}, Expiry Date: ${foodItem.expiryDate}');
-            });
+            for (var foodItem in allFoodItems) {
+              print(
+                  'Food Item: ${foodItem.name}, Expiry Date: ${foodItem.expiryDate}');
+            }
 
             // Example of updating a food item in the database
             final updatedFoodItem = FoodItem(
               id: insertedId,
               name: 'Milk',
               quantity: 2,
-              expiryDate: DateTime.now().add(Duration(days: 14)),
+              expiryDate: DateTime.now().add(const Duration(days: 14)),
             );
             await dbHelper.updateFoodItem(updatedFoodItem);
 
@@ -120,7 +257,7 @@ class HomeScreen extends StatelessWidget {
             // Close the database when it's no longer needed
             dbHelper.closeDatabase();
           },
-          child: Text('Perform Database Operations'),
+          child: const Text('Perform Database Operations'),
         ),
       ),
     );
@@ -129,13 +266,15 @@ class HomeScreen extends StatelessWidget {
 
 // Placeholder screens for Food Tracking, Pantry Management, and Nutrition Analysis
 class FoodTrackingScreen extends StatelessWidget {
+  const FoodTrackingScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Food Tracking'),
+        title: const Text('Food Tracking'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'This is the Food Tracking screen. Implement your food tracking features here!',
           style: TextStyle(fontSize: 18),
@@ -146,13 +285,15 @@ class FoodTrackingScreen extends StatelessWidget {
 }
 
 class PantryManagementScreen extends StatelessWidget {
+  const PantryManagementScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pantry Management'),
+        title: const Text('Pantry Management'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'This is the Pantry Management screen. Implement your pantry management features here!',
           style: TextStyle(fontSize: 18),
@@ -163,13 +304,15 @@ class PantryManagementScreen extends StatelessWidget {
 }
 
 class NutritionAnalysisScreen extends StatelessWidget {
+  const NutritionAnalysisScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nutrition Analysis'),
+        title: const Text('Nutrition Analysis'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'This is the Nutrition Analysis screen. Implement your nutrition analysis features here!',
           style: TextStyle(fontSize: 18),
