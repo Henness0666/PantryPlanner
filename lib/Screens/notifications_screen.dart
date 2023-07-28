@@ -7,11 +7,13 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const BaseScreen(
-      title: 'Notifications',
+      title: 'Alerts',
+      // The leading property defines the widget to display before the toolbar's title.
+      // It is often used to display a back button.
       body: Center(
         child: Text(
-          'This is the Notifications screen. Implement your notifications features here!',
-          style: TextStyle(fontSize: 18),
+          'Alert content goes here',
+          style: TextStyle(fontSize: 24),
         ),
       ),
     );
