@@ -6,14 +6,14 @@ import '/Screens/pantry_screen.dart';
 import '/Screens/meal_planning_screen.dart';
 import '/Screens/shopping_list_screen.dart';
 import '/Screens/notifications_screen.dart';
-import 'food_tracking_screen.dart';
-import 'nutrition_analysis_screen.dart';
-import 'setting_screen.dart';
-import 'Screens/about_screen.dart';
-import 'help_screen.dart';
-import 'login_screen.dart';
-import 'register_screen.dart';
-import 'forgot_password_screen.dart';
+import '/Screens/food_tracking_screen.dart';
+import '/Screens/nutrition_analysis_screen.dart';
+import '/Screens/setting_screen.dart';
+import '/Screens/about_screen.dart';
+import '/Screens/help_screen.dart';
+import '/Screens/login_screen.dart';
+import '/Screens/register_screen.dart';
+import '/Screens/forgot_password_screen.dart';
 
 void main() {
   // Avoid errors caused by flutter upgrade.
