@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_app/Widgets/side_menu.dart';
 //import 'package:sqflite/sqflite.dart';
 
 import '/Screens/home_screen.dart';
@@ -8,6 +9,7 @@ import '/Screens/shopping_list_screen.dart';
 import '/Screens/notifications_screen.dart';
 import '/Screens/food_tracking_screen.dart';
 import '/Screens/nutrition_analysis_screen.dart';
+import 'Screens/base_screen.dart';
 import 'Screens/settings_screen.dart';
 import '/Screens/about_screen.dart';
 import '/Screens/help_screen.dart';
@@ -31,6 +33,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  final PageController _pageController = PageController(initialPage: 2);
   int _selectedIndex = 2;
 
   final List<Widget> _widgetOptions = [
@@ -41,10 +44,16 @@ class MyAppState extends State<MyApp> {
     const NotificationsScreen(), // Notifications Screen
   ];
 
+  final List<String> _pageTitleOptions = [
+    'Pantry', // Pantry Screen
+    'Shopping List', // Shopping List Screen
+    'Home', // Home/Dashboard Screen
+    'Meal Plan', // Meal Planning Screen
+    'Alerts', // Notifications Screen
+  ];
+
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    _pageController.jumpToPage(index);
   }
 
   // Define your light and dark themes here
@@ -66,41 +75,50 @@ class MyAppState extends State<MyApp> {
       title: 'Pantry Planner',
       theme: lightTheme, // Your light theme
       darkTheme: darkTheme, // Your dark theme
-      routes: {
-        '/': (context) => Scaffold(
-              body: Center(
-                child: _widgetOptions.elementAt(_selectedIndex),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.kitchen),
-                    label: 'Pantry',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.list),
-                    label: 'Shopping List',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.restaurant_menu),
-                    label: 'Meal Plan',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.notifications),
-                    label: 'Alerts',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Colors.amber[800],
-                unselectedItemColor:
-                    Colors.grey, // Change this color as per your requirement
-                onTap: _onItemTapped,
-              ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(_pageTitleOptions[_selectedIndex]),
+        ),
+        drawer: const SideMenu(),
+        body: PageView(
+          controller: _pageController,
+          children: _widgetOptions,
+          onPageChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.kitchen),
+              label: 'Pantry',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Shopping List',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.restaurant_menu),
+              label: 'Meal Plan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Alerts',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
+        ),
+      ),
+      routes: {
         '/foodTracking': (context) => const FoodTrackingScreen(),
         '/nutritionAnalysis': (context) => const NutritionAnalysisScreen(),
         '/settings': (context) => const SettingsScreen(),
@@ -113,45 +131,3 @@ class MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-// testDatabase () async {
-
-
-//   // Create a FoodItem and add it to the items table
-//   var fido = FoodItem(
-//     id: 0,
-//     name: 'Bones',
-//     quantity: 35,
-//     expiryDate: DateTime.parse('01/01/2200'),
-//   );
-
-//   await insertFoodItem(fido);
-
-//   // Now, use the method above to retrieve all the items.
-//   if (kDebugMode) {
-//     print(await items());
-//   } // Prints a list that include Fido.
-
-//   // Update Fido's age and save it to the database.
-//   fido = FoodItem(
-//     id: fido.id,
-//     name: fido.name,
-//     quantity: fido.quantity - 5,
-//     expiryDate: fido.expiryDate,
-//   );
-//   await updateFoodItem(fido);
-
-//   // Print the updated results.
-//   if (kDebugMode) {
-//     print(await items());
-//   } // Prints Fido with age 42.
-
-//   // Delete Fido from the database.
-//   await deleteFoodItem(fido.id);
-
-//   // Print the list of items (empty).
-//   if (kDebugMode) {
-//     print(await items());
-//   }
-// }
