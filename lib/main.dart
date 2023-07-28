@@ -39,13 +39,25 @@ class MyAppState extends State<MyApp> {
     });
   }
 
+  // Define your light and dark themes here
+  final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primarySwatch: Colors.blue,
+    // Other theme properties...
+  );
+
+  final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: Colors.blueGrey,
+    // Other theme properties...
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pantry Planner',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: lightTheme, // Your light theme
+      darkTheme: darkTheme, // Your dark theme
       home: Scaffold(
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
