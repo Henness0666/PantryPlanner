@@ -9,7 +9,7 @@ import '/Screens/notifications_screen.dart';
 import 'food_tracking_screen.dart';
 import 'nutrition_analysis_screen.dart';
 import 'setting_screen.dart';
-import 'about_screen.dart';
+import 'Screens/about_screen.dart';
 import 'help_screen.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
