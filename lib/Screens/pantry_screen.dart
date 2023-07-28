@@ -6,10 +6,10 @@ class PantryScreen extends StatefulWidget {
   const PantryScreen({Key? key}) : super(key: key);
 
   @override
-  _PantryScreenState createState() => _PantryScreenState();
+  PantryScreenState createState() => PantryScreenState();
 }
 
-class _PantryScreenState extends State<PantryScreen> {
+class PantryScreenState extends State<PantryScreen> {
   int _nextItemId = 0; // Variable to keep track of the next item ID
   List<FoodItem> pantryItems = [];
 
@@ -20,18 +20,16 @@ class _PantryScreenState extends State<PantryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Pantry Management'),
-      ),
+    return BaseScreen(
+      title: 'Pantry',
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildAddItemForm(),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Pantry Items',
               style: TextStyle(
                 fontSize: 20,
@@ -137,7 +135,10 @@ class _PantryScreenState extends State<PantryScreen> {
     String name = nameController.text.trim();
     int quantity = int.tryParse(quantityController.text.trim()) ?? 0;
 
-    if (name.isNotEmpty && quantity > 0 && estimatedExpiration != null && dateAdded != null) {
+    if (name.isNotEmpty &&
+        quantity > 0 &&
+        estimatedExpiration != null &&
+        dateAdded != null) {
       FoodItem item = FoodItem(
         id: _nextItemId, // Assign the next item ID
         name: name,
