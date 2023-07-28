@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'food_tracking_screen.dart';
-import 'pantry_screen.dart';
-import 'nutrition_analysis_screen.dart';
+import 'base_screen.dart';
 import 'Data Models/food_item.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,61 +14,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pantry Planner'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.food_bank),
-              title: const Text('Food Tracking'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FoodTrackingScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.kitchen),
-              title: const Text('Pantry Management'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PantryScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.bar_chart),
-              title: const Text('Nutrition Analysis'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NutritionAnalysisScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+    return BaseScreen(
+      title: 'Pantry Planner',
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
