@@ -9,7 +9,6 @@ import '/Screens/shopping_list_screen.dart';
 import '/Screens/notifications_screen.dart';
 import '/Screens/food_tracking_screen.dart';
 import '/Screens/nutrition_analysis_screen.dart';
-import 'Screens/base_screen.dart';
 import 'Screens/settings_screen.dart';
 import '/Screens/about_screen.dart';
 import '/Screens/help_screen.dart';
