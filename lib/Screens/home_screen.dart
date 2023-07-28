@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'food_tracking_screen.dart';
-import 'pantry_screen.dart';
-import 'nutrition_analysis_screen.dart';
 import '/Data Models/food_item.dart';
 import 'base_screen.dart';
 

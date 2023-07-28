@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 
 import '/Screens/home_screen.dart';
 import '/Screens/pantry_screen.dart';
@@ -19,7 +19,7 @@ void main() {
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
-  final db = openDatabase('0');
+  //final db = openDatabase('0');
   runApp(const MyApp());
 }
 
