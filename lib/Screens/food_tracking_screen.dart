@@ -8,11 +8,17 @@ class FoodTrackingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Food Tracking'),
+        // The leading property defines the widget to display before the toolbar's title.
+        // It is often used to display a back button.
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: const Center(
         child: Text(
-          'This is the Food Tracking screen. Implement your food tracking features here!',
-          style: TextStyle(fontSize: 18),
+          'Food Tracking content goes here',
+          style: TextStyle(fontSize: 24),
         ),
       ),
     );

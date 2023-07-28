@@ -28,14 +28,6 @@ class BaseScreen extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/');
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.food_bank),
               title: const Text('Food Tracking'),
               onTap: () {
@@ -44,27 +36,11 @@ class BaseScreen extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.kitchen),
-              title: const Text('Pantry Management'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/pantry');
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.bar_chart),
               title: const Text('Nutrition Analysis'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/nutritionAnalysis');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text('Notifications'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/notifications');
               },
             ),
             ListTile(
