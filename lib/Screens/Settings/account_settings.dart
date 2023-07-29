@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/Widgets/custom_expansion_tile.dart';
+import '/Widgets/expandable_list.dart';
 import '/Controllers/dark_mode_controller.dart';
 import '/Controllers/language_controller.dart';
+import '/Utils/widget_helpers.dart';
 
 class AccountSettingsScreen extends StatelessWidget {
   AccountSettingsScreen({Key? key}) : super(key: key);
@@ -133,7 +134,7 @@ class AccountSettingsScreen extends StatelessWidget {
             Selector<DarkModeController, bool>(
               selector: (context, menuController) => menuController.isExpanded,
               builder: (context, isExpanded, child) =>
-                  CustomExpansionTile<DarkModeController>(
+                  ExpandableList<DarkModeController>(
                 title: const Text('Dark Mode'),
                 subtitle: Selector<DarkModeController, DarkModeOption>(
                   selector: (context, menuController) =>
@@ -141,27 +142,14 @@ class AccountSettingsScreen extends StatelessWidget {
                   builder: (context, currentDarkModeOption, child) =>
                       Text(darkModeNames[currentDarkModeOption]!),
                 ),
-                children: DarkModeOption.values.map((option) {
-                  return ListTile(
-                    title: Text(darkModeNames[option]!),
-                    trailing: Radio<DarkModeOption>(
-                      value: option,
-                      groupValue: Provider.of<DarkModeController>(context)
-                          .currentDarkModeOption,
-                      onChanged: (DarkModeOption? value) {
-                        if (value != null) {
-                          Provider.of<DarkModeController>(context,
-                                  listen: false)
-                              .setDarkModeOption(value);
-                        }
-                      },
-                    ),
-                    onTap: () {
-                      Provider.of<DarkModeController>(context, listen: false)
-                          .setDarkModeOption(option);
-                    },
-                  );
-                }).toList(),
+                children: createOptionTiles(
+                  context,
+                  Provider.of<DarkModeController>(context),
+                  DarkModeOption.values, // Provide the values here
+                  darkModeNames,
+                  (controller) => controller.currentDarkModeOption,
+                  (controller, option) => controller.setDarkModeOption(option),
+                ),
               ),
             ),
             const Divider(),
@@ -176,7 +164,7 @@ class AccountSettingsScreen extends StatelessWidget {
             Selector<LanguageController, bool>(
               selector: (context, menuController) => menuController.isExpanded,
               builder: (context, isExpanded, child) =>
-                  CustomExpansionTile<LanguageController>(
+                  ExpandableList<LanguageController>(
                 title: const Text('Language'),
                 subtitle: Selector<LanguageController, LanguageOption>(
                   selector: (context, menuController) =>
@@ -184,27 +172,14 @@ class AccountSettingsScreen extends StatelessWidget {
                   builder: (context, currentLanguageOption, child) =>
                       Text(languageNames[currentLanguageOption]!),
                 ),
-                children: LanguageOption.values.map((option) {
-                  return ListTile(
-                    title: Text(languageNames[option]!),
-                    trailing: Radio<LanguageOption>(
-                      value: option,
-                      groupValue: Provider.of<LanguageController>(context)
-                          .currentLanguageOption,
-                      onChanged: (LanguageOption? value) {
-                        if (value != null) {
-                          Provider.of<LanguageController>(context,
-                                  listen: false)
-                              .setLanguageOption(value);
-                        }
-                      },
-                    ),
-                    onTap: () {
-                      Provider.of<LanguageController>(context, listen: false)
-                          .setLanguageOption(option);
-                    },
-                  );
-                }).toList(),
+                children: createOptionTiles(
+                  context,
+                  Provider.of<LanguageController>(context),
+                  LanguageOption.values, // Provide the values here
+                  languageNames,
+                  (controller) => controller.currentLanguageOption,
+                  (controller, option) => controller.setLanguageOption(option),
+                ),
               ),
             ),
             const Divider(),

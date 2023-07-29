@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/Controllers/expandable_controller.dart';
 
-class CustomExpansionTile<T extends ExpandableController>
-    extends StatelessWidget {
+class ExpandableList<T extends ExpandableController> extends StatelessWidget {
   final Widget title;
   final Widget? subtitle;
   final List<Widget> children;
   final Key? key;
 
-  const CustomExpansionTile({
+  const ExpandableList({
     required this.title,
     this.subtitle,
     required this.children,
