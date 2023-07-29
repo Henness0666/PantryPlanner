@@ -16,16 +16,25 @@ import '/Screens/help_screen.dart';
 import '/Screens/login_screen.dart';
 import '/Screens/register_screen.dart';
 import '/Screens/forgot_password_screen.dart';
-import '/Controllers/settings_menu_controller.dart';
+import '/Controllers/dark_mode_controller.dart';
+import '/Controllers/language_controller.dart';
 
 void main() {
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
-  //final db = openDatabase('0');
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => SettingsMenuController(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => DarkModeController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LanguageController(),
+        ),
+        // Add more providers here if needed
+      ],
       child: const MyApp(),
     ),
   );

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '/Widgets/custom_expansion_tile.dart';
-import '/Controllers/settings_menu_controller.dart';
+import '/Controllers/dark_mode_controller.dart';
+import '/Controllers/language_controller.dart';
 
 class AccountSettingsScreen extends StatelessWidget {
   AccountSettingsScreen({Key? key}) : super(key: key);
@@ -13,10 +14,35 @@ class AccountSettingsScreen extends StatelessWidget {
     DarkModeOption.dark: 'Enabled',
   };
 
+  final Map<LanguageOption, String> languageNames = {
+    LanguageOption.system: 'System Default',
+    LanguageOption.english: 'English',
+    LanguageOption.spanish: 'Español',
+    LanguageOption.french: 'Français',
+    LanguageOption.german: 'Deutsch',
+    LanguageOption.italian: 'Italiano',
+    LanguageOption.portuguese: 'Português',
+    LanguageOption.russian: 'Русский',
+    LanguageOption.arabic: 'العربية',
+    LanguageOption.hindi: 'हिन्दी',
+    LanguageOption.japanese: '日本語',
+    LanguageOption.korean: '한국어',
+    LanguageOption.chineseSimplified: '简体中文',
+    LanguageOption.chineseTraditional: '繁體中文',
+  };
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => SettingsMenuController(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => DarkModeController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LanguageController(),
+        ),
+        // Add more providers here if needed
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
@@ -33,6 +59,7 @@ class AccountSettingsScreen extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Display Name'),
+              subtitle: const Text('John Doe'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 // Navigate to change display name screen
@@ -40,6 +67,7 @@ class AccountSettingsScreen extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Email'),
+              subtitle: const Text('johndoe@example.com'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 // Navigate to change email screen
@@ -47,6 +75,7 @@ class AccountSettingsScreen extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Phone'),
+              subtitle: const Text('+1 123-456-7890'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 // Navigate to change phone screen
@@ -54,6 +83,7 @@ class AccountSettingsScreen extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Password'),
+              subtitle: Text('⬤' * 11),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 // Navigate to change password screen
@@ -100,12 +130,12 @@ class AccountSettingsScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.grey)),
             ),
-            Selector<SettingsMenuController, bool>(
-              selector: (context, menuController) =>
-                  menuController.isDarkModeExpanded,
-              builder: (context, isExpanded, child) => CustomExpansionTile(
+            Selector<DarkModeController, bool>(
+              selector: (context, menuController) => menuController.isExpanded,
+              builder: (context, isExpanded, child) =>
+                  CustomExpansionTile<DarkModeController>(
                 title: const Text('Dark Mode'),
-                subtitle: Selector<SettingsMenuController, DarkModeOption>(
+                subtitle: Selector<DarkModeController, DarkModeOption>(
                   selector: (context, menuController) =>
                       menuController.currentDarkModeOption,
                   builder: (context, currentDarkModeOption, child) =>
@@ -116,19 +146,18 @@ class AccountSettingsScreen extends StatelessWidget {
                     title: Text(darkModeNames[option]!),
                     trailing: Radio<DarkModeOption>(
                       value: option,
-                      groupValue: Provider.of<SettingsMenuController>(context)
+                      groupValue: Provider.of<DarkModeController>(context)
                           .currentDarkModeOption,
                       onChanged: (DarkModeOption? value) {
                         if (value != null) {
-                          Provider.of<SettingsMenuController>(context,
+                          Provider.of<DarkModeController>(context,
                                   listen: false)
                               .setDarkModeOption(value);
                         }
                       },
                     ),
                     onTap: () {
-                      Provider.of<SettingsMenuController>(context,
-                              listen: false)
+                      Provider.of<DarkModeController>(context, listen: false)
                           .setDarkModeOption(option);
                     },
                   );
@@ -144,16 +173,36 @@ class AccountSettingsScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.grey)),
             ),
-            ListTile(
-              title: const Text('Language'),
-              trailing: DropdownButton<String>(
-                value: 'English',
-                onChanged: (_) {},
-                items: <String>['English', 'Spanish', 'French']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+            Selector<LanguageController, bool>(
+              selector: (context, menuController) => menuController.isExpanded,
+              builder: (context, isExpanded, child) =>
+                  CustomExpansionTile<LanguageController>(
+                title: const Text('Language'),
+                subtitle: Selector<LanguageController, LanguageOption>(
+                  selector: (context, menuController) =>
+                      menuController.currentLanguageOption,
+                  builder: (context, currentLanguageOption, child) =>
+                      Text(languageNames[currentLanguageOption]!),
+                ),
+                children: LanguageOption.values.map((option) {
+                  return ListTile(
+                    title: Text(languageNames[option]!),
+                    trailing: Radio<LanguageOption>(
+                      value: option,
+                      groupValue: Provider.of<LanguageController>(context)
+                          .currentLanguageOption,
+                      onChanged: (LanguageOption? value) {
+                        if (value != null) {
+                          Provider.of<LanguageController>(context,
+                                  listen: false)
+                              .setLanguageOption(value);
+                        }
+                      },
+                    ),
+                    onTap: () {
+                      Provider.of<LanguageController>(context, listen: false)
+                          .setLanguageOption(option);
+                    },
                   );
                 }).toList(),
               ),

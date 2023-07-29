@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/Controllers/settings_menu_controller.dart';
+import '/Controllers/expandable_controller.dart';
 
-class CustomExpansionTile extends StatelessWidget {
+class CustomExpansionTile<T extends ExpandableController>
+    extends StatelessWidget {
   final Widget title;
   final Widget? subtitle;
   final List<Widget> children;
-  @override
   final Key? key;
 
   const CustomExpansionTile({
@@ -18,14 +18,14 @@ class CustomExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SettingsMenuController>(
+    return Consumer<T>(
       builder: (context, menuController, _) {
         return ExpansionPanelList(
           expansionCallback: (int index, bool isExpanded) {
             if (isExpanded) {
-              menuController.collapseDarkMode();
+              menuController.collapse();
             } else {
-              menuController.expandDarkMode();
+              menuController.expand();
             }
           },
           elevation: 1,
@@ -35,23 +35,22 @@ class CustomExpansionTile extends StatelessWidget {
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return ListTile(
                   title: title,
-                  subtitle: subtitle, // Use the subtitle here
+                  subtitle: subtitle,
                   onTap: () {
-                    // Handling tap here
                     if (isExpanded) {
-                      menuController.collapseDarkMode();
+                      menuController.collapse();
                     } else {
-                      menuController.expandDarkMode();
+                      menuController.expand();
                     }
                   },
                 );
               },
               body: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                height: menuController.isDarkModeExpanded ? null : 0,
+                height: menuController.isExpanded ? null : 0,
                 child: Column(children: children),
               ),
-              isExpanded: menuController.isDarkModeExpanded,
+              isExpanded: menuController.isExpanded,
             ),
           ],
         );

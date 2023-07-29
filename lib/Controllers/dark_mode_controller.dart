@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'expandable_controller.dart';
 
 enum DarkModeOption {
   system,
@@ -6,26 +7,30 @@ enum DarkModeOption {
   light,
 }
 
-class SettingsMenuController extends ChangeNotifier {
-  bool _isDarkModeExpanded = false;
+class DarkModeController extends ChangeNotifier
+    implements ExpandableController {
+  bool _isExpanded = false;
   DarkModeOption _currentDarkModeOption = DarkModeOption.system;
 
-  bool get isDarkModeExpanded => _isDarkModeExpanded;
+  @override
+  bool get isExpanded => _isExpanded;
   DarkModeOption get currentDarkModeOption => _currentDarkModeOption;
 
-  void collapseDarkMode() {
-    _isDarkModeExpanded = false;
+  @override
+  void collapse() {
+    _isExpanded = false;
     notifyListeners();
   }
 
-  void expandDarkMode() {
-    _isDarkModeExpanded = true;
+  @override
+  void expand() {
+    _isExpanded = true;
     notifyListeners();
   }
 
   void setDarkModeOption(DarkModeOption option) {
     _currentDarkModeOption = option;
-    collapseDarkMode();
+    collapse();
     notifyListeners();
   }
 }
