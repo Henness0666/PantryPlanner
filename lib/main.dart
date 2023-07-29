@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_app/Widgets/side_menu.dart';
+import 'package:provider/provider.dart';
 //import 'package:sqflite/sqflite.dart';
 
 import '/Screens/home_screen.dart';
@@ -9,19 +10,25 @@ import '/Screens/shopping_list_screen.dart';
 import '/Screens/notifications_screen.dart';
 import '/Screens/food_tracking_screen.dart';
 import '/Screens/nutrition_analysis_screen.dart';
-import 'Screens/settings_screen.dart';
+import 'Screens/Settings/settings_screen.dart';
 import '/Screens/about_screen.dart';
 import '/Screens/help_screen.dart';
 import '/Screens/login_screen.dart';
 import '/Screens/register_screen.dart';
 import '/Screens/forgot_password_screen.dart';
+import '/Controllers/settings_menu_controller.dart';
 
 void main() {
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
   //final db = openDatabase('0');
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => SettingsMenuController(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -120,7 +127,7 @@ class MyAppState extends State<MyApp> {
       routes: {
         '/foodTracking': (context) => const FoodTrackingScreen(),
         '/nutritionAnalysis': (context) => const NutritionAnalysisScreen(),
-        '/settings': (context) => const SettingsScreen(),
+        '/settings': (context) => SettingsScreen(),
         '/about': (context) => const AboutScreen(),
         '/help': (context) => const HelpScreen(),
         '/login': (context) => const LoginScreen(),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class SecuritySettingsScreen extends StatelessWidget {
+  const SecuritySettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('Security Settings'),
         // The leading property defines the widget to display before the toolbar's title.
         // It is often used to display a back button.
         leading: IconButton(
@@ -17,7 +17,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Settings content goes here',
+          'Security Settings go here',
           style: TextStyle(fontSize: 24),
         ),
       ),
