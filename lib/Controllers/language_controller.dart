@@ -20,6 +20,22 @@ enum LanguageOption {
 
 class LanguageController extends ChangeNotifier
     implements ExpandableController {
+  static const Map<LanguageOption, String> languageNames = {
+    LanguageOption.system: 'System Default',
+    LanguageOption.english: 'English',
+    LanguageOption.spanish: 'Español',
+    LanguageOption.french: 'Français',
+    LanguageOption.german: 'Deutsch',
+    LanguageOption.italian: 'Italiano',
+    LanguageOption.portuguese: 'Português',
+    LanguageOption.russian: 'Русский',
+    LanguageOption.arabic: 'العربية',
+    LanguageOption.hindi: 'हिन्दी',
+    LanguageOption.japanese: '日本語',
+    LanguageOption.korean: '한국어',
+    LanguageOption.chineseSimplified: '简体中文',
+    LanguageOption.chineseTraditional: '繁體中文',
+  };
   bool _isExpanded = false;
   LanguageOption _currentLanguageOption = LanguageOption.system;
 

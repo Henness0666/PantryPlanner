@@ -9,6 +9,12 @@ enum DarkModeOption {
 
 class DarkModeController extends ChangeNotifier
     implements ExpandableController {
+  static const Map<DarkModeOption, String> darkModeNames = {
+    DarkModeOption.system: 'System Default',
+    DarkModeOption.light: 'Disabled',
+    DarkModeOption.dark: 'Enabled',
+  };
+
   bool _isExpanded = false;
   DarkModeOption _currentDarkModeOption = DarkModeOption.system;
 

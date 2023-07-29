@@ -30,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right), // Arrow icon at the end
             onTap: () {
               NavigationUtils.navigateWithoutTransition(
-                  context, const PrivacySettingsScreen());
+                  context, PrivacySettingsScreen());
             },
           ),
           ListTile(
