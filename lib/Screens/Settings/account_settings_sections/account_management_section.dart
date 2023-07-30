@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pantry_app/Widgets/list_tile_with_chevron.dart';
 import 'package:pantry_app/Widgets/section.dart';
 
 class AccountManagementSection extends Section {
