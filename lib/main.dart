@@ -3,6 +3,7 @@ import 'package:pantry_app/Widgets/side_menu.dart';
 import 'package:provider/provider.dart';
 //import 'package:sqflite/sqflite.dart';
 
+import 'dynamic_theme.dart';
 import '/Screens/home_screen.dart';
 import '/Screens/pantry_screen.dart';
 import '/Screens/meal_planning_screen.dart';
@@ -10,7 +11,7 @@ import '/Screens/shopping_list_screen.dart';
 import '/Screens/notifications_screen.dart';
 import '/Screens/food_tracking_screen.dart';
 import '/Screens/nutrition_analysis_screen.dart';
-import 'Screens/Settings/settings_screen.dart';
+import '/Screens/Settings/settings_screen.dart';
 import '/Screens/about_screen.dart';
 import '/Screens/help_screen.dart';
 import '/Screens/login_screen.dart';
@@ -18,6 +19,7 @@ import '/Screens/register_screen.dart';
 import '/Screens/forgot_password_screen.dart';
 import '/Controllers/dark_mode_controller.dart';
 import '/Controllers/language_controller.dart';
+import 'Controllers/theme_changer.dart';
 
 void main() {
   // Avoid errors caused by flutter upgrade.
@@ -32,6 +34,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageController(),
+        ),
+        ChangeNotifierProvider<ThemeChanger>(
+          create: (_) => ThemeChanger(DynamicTheme.lightTheme),
         ),
         // Add more providers here if needed
       ],
@@ -71,25 +76,12 @@ class MyAppState extends State<MyApp> {
     _pageController.jumpToPage(index);
   }
 
-  // Define your light and dark themes here
-  final ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: Colors.blue,
-    // Other theme properties...
-  );
-
-  final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.blueGrey,
-    // Other theme properties...
-  );
-
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
       title: 'Pantry Planner',
-      theme: lightTheme, // Your light theme
-      darkTheme: darkTheme, // Your dark theme
+      theme: theme.getTheme(),
       home: Scaffold(
         appBar: AppBar(
           title: Text(_pageTitleOptions[_selectedIndex]),

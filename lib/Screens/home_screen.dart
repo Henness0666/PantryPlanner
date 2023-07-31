@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'base_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'package:pantry_app/Controllers/theme_changer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const BaseScreen(
-      title: 'Pantry Planner',
+    final theme = Provider.of<ThemeChanger>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dynamic Theme'),
+      ),
       body: Center(
-        child: Text(
-          'Home/Dashboard content goes here',
-          style: TextStyle(fontSize: 24),
+        child: Switch(
+          value: theme.isDark(),
+          onChanged: (value) {
+            theme.toggleTheme();
+          },
         ),
       ),
     );
