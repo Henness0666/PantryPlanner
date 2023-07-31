@@ -8,19 +8,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeChanger>(context);
+    // final theme = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dynamic Theme'),
       ),
-      body: Center(
-        child: Switch(
-          value: theme.isDark(),
-          onChanged: (value) {
-            theme.toggleTheme();
-          },
-        ),
-      ),
+      body: const Text("Hello World!"),
     );
   }
 }

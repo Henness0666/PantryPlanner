@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:provider/provider.dart';
 import '/Controllers/dark_mode_controller.dart';
 import '/Controllers/language_controller.dart';
@@ -13,10 +14,11 @@ class AccountSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeChanger = Provider.of<ThemeChanger>(context, listen: false);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => DarkModeController(),
+          create: (_) => DarkModeController(themeChanger),
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageController(),

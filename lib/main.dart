@@ -29,14 +29,18 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => DarkModeController(),
+        ChangeNotifierProvider<ThemeChanger>(
+          create: (_) =>
+              ThemeChanger(DynamicTheme.lightTheme, DarkModeOption.light),
+        ),
+        ChangeNotifierProxyProvider<ThemeChanger, DarkModeController>(
+          create: (context) => DarkModeController(
+              Provider.of<ThemeChanger>(context, listen: false)),
+          update: (context, themeChanger, darkModeController) =>
+              DarkModeController(themeChanger),
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageController(),
-        ),
-        ChangeNotifierProvider<ThemeChanger>(
-          create: (_) => ThemeChanger(DynamicTheme.lightTheme),
         ),
         // Add more providers here if needed
       ],

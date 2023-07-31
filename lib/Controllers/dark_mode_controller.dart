@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'expandable_controller.dart';
 
 enum DarkModeOption {
@@ -9,6 +10,10 @@ enum DarkModeOption {
 
 class DarkModeController extends ChangeNotifier
     implements ExpandableController {
+  final ThemeChanger _themeChanger;
+
+  DarkModeController(this._themeChanger);
+
   static const Map<DarkModeOption, String> darkModeNames = {
     DarkModeOption.system: 'System Default',
     DarkModeOption.light: 'Disabled',
@@ -36,6 +41,18 @@ class DarkModeController extends ChangeNotifier
 
   void setDarkModeOption(DarkModeOption option) {
     _currentDarkModeOption = option;
+
+    switch (_currentDarkModeOption) {
+      case DarkModeOption.dark:
+        _themeChanger.setDarkMode();
+        break;
+      case DarkModeOption.light:
+        _themeChanger.setLightMode();
+        break;
+      default:
+        break;
+    }
+
     collapse();
     notifyListeners();
   }
