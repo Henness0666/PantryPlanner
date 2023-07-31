@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'food_item.dart';
+import 'inventory_item.dart';
 
 void main() async {
   // Avoid errors caused by flutter upgrade.
@@ -27,6 +27,23 @@ void main() async {
     // path to perform database upgrades and downgrades.
     version: 1,
   );
+
+
+//define a function that stores user information locally
+  Future<void> insertUser(User user) async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Insert the User into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same item is inserted twice.
+    //
+    // In this case, replace any previous data.
+    await db.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 
   // Define a function that inserts items into the database
   Future<void> insertFoodItem(FoodItem item) async {
