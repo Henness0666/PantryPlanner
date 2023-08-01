@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'expandable_controller.dart';
+import 'expandable.dart';
 
 enum LanguageOption {
   system,
@@ -18,7 +18,7 @@ enum LanguageOption {
   chineseTraditional,
 }
 
-class LanguageController extends ChangeNotifier
+class LanguageListController extends ChangeNotifier
     implements ExpandableController {
   static const Map<LanguageOption, String> languageNames = {
     LanguageOption.system: 'System Default',

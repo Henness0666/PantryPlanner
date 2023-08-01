@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:pantry_app/Widgets/side_menu.dart';
 import 'package:provider/provider.dart';
-//import 'package:sqflite/sqflite.dart';
 
-import 'dynamic_theme.dart';
-import '/Screens/home_screen.dart';
-import '/Screens/pantry_screen.dart';
-import '/Screens/meal_planning_screen.dart';
-import '/Screens/shopping_list_screen.dart';
-import '/Screens/notifications_screen.dart';
-import '/Screens/food_tracking_screen.dart';
-import '/Screens/nutrition_analysis_screen.dart';
-import '/Screens/Settings/settings_screen.dart';
-import '/Screens/about_screen.dart';
-import '/Screens/help_screen.dart';
-import '/Screens/login_screen.dart';
-import '/Screens/register_screen.dart';
-import '/Screens/forgot_password_screen.dart';
-import '/Controllers/dark_mode_controller.dart';
-import '/Controllers/language_controller.dart';
-import '/Controllers/theme_changer.dart';
+import 'package:pantry_app/Widgets/side_menu.dart';
+import 'package:pantry_app/dynamic_theme.dart';
+import 'package:pantry_app/Screens/home_screen.dart';
+import 'package:pantry_app/Screens/pantry_screen.dart';
+import 'package:pantry_app/Screens/meal_planning_screen.dart';
+import 'package:pantry_app/Screens/shopping_list_screen.dart';
+import 'package:pantry_app/Screens/notifications_screen.dart';
+import 'package:pantry_app/Screens/food_tracking_screen.dart';
+import 'package:pantry_app/Screens/nutrition_analysis_screen.dart';
+import 'package:pantry_app/Screens/Settings/settings_screen.dart';
+import 'package:pantry_app/Screens/about_screen.dart';
+import 'package:pantry_app/Screens/help_screen.dart';
+import 'package:pantry_app/Screens/login_screen.dart';
+import 'package:pantry_app/Screens/register_screen.dart';
+import 'package:pantry_app/Screens/forgot_password_screen.dart';
+import 'package:pantry_app/Controllers/dark_mode_list.dart';
+import 'package:pantry_app/Controllers/language_list.dart';
+import 'package:pantry_app/Controllers/theme_changer.dart';
+import 'package:pantry_app/Controllers/language.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,18 +51,19 @@ void main() async {
             darkModeOption: savedThemePreference,
           ),
         ),
-        ChangeNotifierProxyProvider<ThemeChanger, DarkModeController>(
+        ChangeNotifierProxyProvider<ThemeChanger, DarkModeListController>(
           create: (context) {
             final themeChanger =
                 Provider.of<ThemeChanger>(context, listen: false);
-            return DarkModeController(
+            return DarkModeListController(
                 themeChanger, themeChanger.getDarkModeOption);
           },
           update: (context, themeChanger, darkModeController) =>
-              DarkModeController(themeChanger, themeChanger.getDarkModeOption),
+              DarkModeListController(
+                  themeChanger, themeChanger.getDarkModeOption),
         ),
         ChangeNotifierProvider(
-          create: (context) => LanguageController(),
+          create: (context) => LanguageListController(),
         ),
         // Add more providers here if needed
       ],
@@ -125,6 +126,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeLocales(List<Locale>? locale) {
+    final languageController =
+        Provider.of<LanguageController>(context, listen: false);
+    languageController.setLocale(locale![0]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
@@ -176,7 +184,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       routes: {
         '/foodTracking': (context) => const FoodTrackingScreen(),
         '/nutritionAnalysis': (context) => const NutritionAnalysisScreen(),
-        '/settings': (context) => SettingsScreen(),
+        '/settings': (context) => const SettingsScreen(),
         '/about': (context) => const AboutScreen(),
         '/help': (context) => const HelpScreen(),
         '/login': (context) => const LoginScreen(),

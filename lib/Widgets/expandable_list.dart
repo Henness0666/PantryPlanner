@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/Controllers/expandable_controller.dart';
+import '../Controllers/expandable.dart';
 
 class ExpandableList<T extends ExpandableController> extends StatelessWidget {
   final Widget title;

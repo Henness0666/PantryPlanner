@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_app/Widgets/section.dart';
 import 'package:pantry_app/Widgets/expandable_list.dart';
-import 'package:pantry_app/Controllers/language_controller.dart';
+import 'package:pantry_app/Controllers/language_list.dart';
 import 'package:provider/provider.dart';
 import '/Utils/widget_helpers.dart';
 
@@ -36,12 +36,12 @@ class LanguageSection extends Section {
   @override
   List<Widget> body() {
     return [
-      Selector<LanguageController, bool>(
+      Selector<LanguageListController, bool>(
         selector: (context, menuController) => menuController.isExpanded,
         builder: (context, isExpanded, child) =>
-            ExpandableList<LanguageController>(
+            ExpandableList<LanguageListController>(
           title: const Text('Language'),
-          subtitle: Selector<LanguageController, LanguageOption>(
+          subtitle: Selector<LanguageListController, LanguageOption>(
             selector: (context, menuController) =>
                 menuController.currentLanguageOption,
             builder: (context, currentLanguageOption, child) =>
@@ -49,7 +49,7 @@ class LanguageSection extends Section {
           ),
           children: createOptionTiles(
             context,
-            Provider.of<LanguageController>(context),
+            Provider.of<LanguageListController>(context),
             LanguageOption.values, // Provide the values here
             languageNames,
             (controller) => controller.currentLanguageOption,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:provider/provider.dart';
-import '/Controllers/dark_mode_controller.dart';
-import '/Controllers/language_controller.dart';
+import '../../Controllers/dark_mode_list.dart';
+import '../../Controllers/language_list.dart';
 import '/Screens/Settings/account_settings_sections/account_details_section.dart';
 import '/Screens/Settings/account_settings_sections/account_management_section.dart';
 import '/Screens/Settings/account_settings_sections/display_section.dart';
@@ -18,11 +18,11 @@ class AccountSettingsScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) =>
-              DarkModeController(themeChanger, themeChanger.getDarkModeOption),
+          create: (_) => DarkModeListController(
+              themeChanger, themeChanger.getDarkModeOption),
         ),
         ChangeNotifierProvider(
-          create: (context) => LanguageController(),
+          create: (context) => LanguageListController(),
         ),
       ],
       child: Scaffold(

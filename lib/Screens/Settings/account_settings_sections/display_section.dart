@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_app/Widgets/section.dart';
 import 'package:pantry_app/Widgets/expandable_list.dart';
-import 'package:pantry_app/Controllers/dark_mode_controller.dart';
+import 'package:pantry_app/Controllers/dark_mode_list.dart';
 import 'package:provider/provider.dart';
 import '/Utils/widget_helpers.dart';
 
@@ -25,12 +25,12 @@ class DisplaySection extends Section {
   @override
   List<Widget> body() {
     return [
-      Selector<DarkModeController, bool>(
+      Selector<DarkModeListController, bool>(
         selector: (context, menuController) => menuController.isExpanded,
         builder: (context, isExpanded, child) =>
-            ExpandableList<DarkModeController>(
+            ExpandableList<DarkModeListController>(
           title: const Text('Dark Mode'),
-          subtitle: Selector<DarkModeController, DarkModeOption>(
+          subtitle: Selector<DarkModeListController, DarkModeOption>(
             selector: (context, menuController) =>
                 menuController.currentDarkModeOption,
             builder: (context, currentDarkModeOption, child) =>
@@ -38,7 +38,7 @@ class DisplaySection extends Section {
           ),
           children: createOptionTiles(
             context,
-            Provider.of<DarkModeController>(context),
+            Provider.of<DarkModeListController>(context),
             DarkModeOption.values, // Provide the values here
             darkModeNames,
             (controller) => controller.currentDarkModeOption,

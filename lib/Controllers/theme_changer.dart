@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pantry_app/Controllers/dark_mode_controller.dart';
+import 'package:pantry_app/Controllers/dark_mode_list.dart';
 import 'package:pantry_app/dynamic_theme.dart';
 
 class ThemeChanger with ChangeNotifier {
