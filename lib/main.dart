@@ -126,10 +126,11 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeLocales(List<Locale>? locale) {
+  void didChangeLocales(List<Locale>? locales) {
     final languageController =
         Provider.of<LanguageController>(context, listen: false);
-    languageController.setLocale(locale![0]);
+    languageController.setLocale(locales![0]);
+    //TODO: Change code to load locale from shared preferences and compare to current locale then update if needed.
   }
 
   @override
