@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pantry_app/Controllers/dark_mode_controller.dart';
 import 'package:pantry_app/dynamic_theme.dart';
 
@@ -6,24 +7,43 @@ class ThemeChanger with ChangeNotifier {
   ThemeData _themeData;
   DarkModeOption _darkModeOption;
 
-  ThemeChanger(this._themeData, this._darkModeOption);
+  ThemeChanger(
+      {required ThemeData themeData, required DarkModeOption darkModeOption})
+      : _themeData = themeData,
+        _darkModeOption = darkModeOption;
 
-  getTheme() => _themeData;
-  getDarkModeOption() => _darkModeOption;
+  ThemeData getTheme() => _themeData;
+  DarkModeOption get getDarkModeOption => _darkModeOption;
 
-  setTheme(ThemeData theme) {
-    _themeData = theme;
+  void setTheme(ThemeData themeData, DarkModeOption darkModeOption) {
+    _themeData = themeData;
+    _darkModeOption = darkModeOption;
     notifyListeners();
   }
 
-  setDarkModeOption(DarkModeOption option) {
+  // Save the theme preference to shared preferences
+  _saveThemePreference(DarkModeOption option) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('darkModeOption', option.index);
+  }
+
+  // Load the theme preference from shared preferences
+  static Future<DarkModeOption> loadThemePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    int optionIndex =
+        prefs.getInt('darkModeOption') ?? DarkModeOption.system.index;
+    return DarkModeOption.values[optionIndex];
+  }
+
+  void setDarkModeOption(DarkModeOption option) {
     _darkModeOption = option;
+    _saveThemePreference(option);
     switch (option) {
       case DarkModeOption.dark:
-        setTheme(DynamicTheme.darkTheme);
+        setTheme(DynamicTheme.darkTheme, DarkModeOption.dark);
         break;
       case DarkModeOption.light:
-        setTheme(DynamicTheme.lightTheme);
+        setTheme(DynamicTheme.lightTheme, DarkModeOption.light);
         break;
       case DarkModeOption.system:
         setSystemTheme();
@@ -31,28 +51,9 @@ class ThemeChanger with ChangeNotifier {
     }
   }
 
-  setDarkMode() {
-    _themeData = DynamicTheme.darkTheme;
-    _darkModeOption = DarkModeOption.dark;
-    notifyListeners();
-  }
-
-  setLightMode() {
-    _themeData = DynamicTheme.lightTheme;
-    _darkModeOption = DarkModeOption.light;
-    notifyListeners();
-  }
-
-  toggleTheme() {
-    if (_themeData.brightness == Brightness.dark) {
-      setLightMode();
-    } else {
-      setDarkMode();
-    }
-  }
-
   setSystemTheme() {
-    if (WidgetsBinding.instance?.window.platformBrightness == Brightness.dark) {
+    if (WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark) {
       _themeData = DynamicTheme.darkTheme;
     } else {
       _themeData = DynamicTheme.lightTheme;

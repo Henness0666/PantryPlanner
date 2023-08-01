@@ -19,25 +19,47 @@ import '/Screens/register_screen.dart';
 import '/Screens/forgot_password_screen.dart';
 import '/Controllers/dark_mode_controller.dart';
 import '/Controllers/language_controller.dart';
-import 'Controllers/theme_changer.dart';
+import '/Controllers/theme_changer.dart';
 
-void main() {
-  // Avoid errors caused by flutter upgrade.
-  // Importing 'package:flutter/widgets.dart' is required.
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load the saved theme preference
+  DarkModeOption savedThemePreference =
+      await ThemeChanger.loadThemePreference();
+
+  // Determine the initial theme
+  ThemeData initialTheme;
+  if (savedThemePreference == DarkModeOption.system) {
+    Brightness currentSystemBrightness =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    initialTheme = currentSystemBrightness == Brightness.dark
+        ? DynamicTheme.darkTheme
+        : DynamicTheme.lightTheme;
+  } else if (savedThemePreference == DarkModeOption.dark) {
+    initialTheme = DynamicTheme.darkTheme;
+  } else {
+    initialTheme = DynamicTheme.lightTheme;
+  }
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeChanger>(
-          create: (_) =>
-              ThemeChanger(DynamicTheme.lightTheme, DarkModeOption.light),
+          create: (_) => ThemeChanger(
+            themeData: initialTheme,
+            darkModeOption: savedThemePreference,
+          ),
         ),
         ChangeNotifierProxyProvider<ThemeChanger, DarkModeController>(
-          create: (context) => DarkModeController(
-              Provider.of<ThemeChanger>(context, listen: false)),
+          create: (context) {
+            final themeChanger =
+                Provider.of<ThemeChanger>(context, listen: false);
+            return DarkModeController(
+                themeChanger, themeChanger.getDarkModeOption);
+          },
           update: (context, themeChanger, darkModeController) =>
-              DarkModeController(themeChanger),
+              DarkModeController(themeChanger, themeChanger.getDarkModeOption),
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageController(),
@@ -56,7 +78,7 @@ class MyApp extends StatefulWidget {
   MyAppState createState() => MyAppState();
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final PageController _pageController = PageController(initialPage: 2);
   int _selectedIndex = 2;
 
@@ -78,6 +100,28 @@ class MyAppState extends State<MyApp> {
 
   void _onItemTapped(int index) {
     _pageController.jumpToPage(index);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() async {
+    final themeChanger = Provider.of<ThemeChanger>(context, listen: false);
+    final darkModePreference = await ThemeChanger.loadThemePreference();
+
+    if (darkModePreference == DarkModeOption.system) {
+      themeChanger.setSystemTheme();
+    }
   }
 
   @override

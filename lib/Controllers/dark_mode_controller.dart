@@ -11,8 +11,9 @@ enum DarkModeOption {
 class DarkModeController extends ChangeNotifier
     implements ExpandableController {
   final ThemeChanger _themeChanger;
+  DarkModeOption _currentDarkModeOption;
 
-  DarkModeController(this._themeChanger);
+  DarkModeController(this._themeChanger, this._currentDarkModeOption);
 
   static const Map<DarkModeOption, String> darkModeNames = {
     DarkModeOption.system: 'System Default',
@@ -21,7 +22,6 @@ class DarkModeController extends ChangeNotifier
   };
 
   bool _isExpanded = false;
-  DarkModeOption _currentDarkModeOption = DarkModeOption.system;
 
   @override
   bool get isExpanded => _isExpanded;
@@ -41,18 +41,7 @@ class DarkModeController extends ChangeNotifier
 
   void setDarkModeOption(DarkModeOption option) {
     _currentDarkModeOption = option;
-
-    switch (_currentDarkModeOption) {
-      case DarkModeOption.dark:
-        _themeChanger.setDarkMode();
-        break;
-      case DarkModeOption.light:
-        _themeChanger.setLightMode();
-        break;
-      default:
-        break;
-    }
-
+    _themeChanger.setDarkModeOption(option);
     collapse();
     notifyListeners();
   }

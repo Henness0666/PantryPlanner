@@ -18,7 +18,8 @@ class AccountSettingsScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => DarkModeController(themeChanger),
+          create: (_) =>
+              DarkModeController(themeChanger, themeChanger.getDarkModeOption),
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageController(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_screen.dart';
+import '../Widgets/base_screen.dart';
 import '/Data Models/food_item.dart';
 
 class PantryScreen extends StatelessWidget {

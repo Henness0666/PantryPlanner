@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'package:pantry_app/Controllers/theme_changer.dart';
+import 'package:pantry_app/Widgets/base_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Provider.of<ThemeChanger>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dynamic Theme'),
+    return const BaseScreen(
+      title: 'Alerts',
+      // The leading property defines the widget to display before the toolbar's title.
+      // It is often used to display a back button.
+      body: Center(
+        child: Text(
+          'Hello World!',
+          style: TextStyle(fontSize: 48),
+        ),
       ),
-      body: const Text("Hello World!"),
     );
   }
 }
