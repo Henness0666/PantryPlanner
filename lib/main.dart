@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,13 +23,18 @@ import 'package:pantry_app/Controllers/dark_mode_list.dart';
 import 'package:pantry_app/Controllers/language_list.dart';
 import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:pantry_app/Controllers/language.dart';
+import 'package:pantry_app/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // Load the saved theme preference
-  DarkModeOption savedThemePreference =
-      await ThemeChanger.loadThemePreference();
+  DarkModeOption savedThemePreference = await ThemeChanger.loadThemePreference();
 
   // Determine the initial theme
   ThemeData initialTheme;
@@ -45,6 +53,12 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider<FirebaseAuth>(
+          create: (_) => FirebaseAuth.instance,
+        ),
+        Provider<FirebaseFirestore>(
+          create: (_) => FirebaseFirestore.instance,
+        ),
         ChangeNotifierProvider<ThemeChanger>(
           create: (_) => ThemeChanger(
             themeData: initialTheme,
@@ -53,14 +67,11 @@ void main() async {
         ),
         ChangeNotifierProxyProvider<ThemeChanger, DarkModeListController>(
           create: (context) {
-            final themeChanger =
-                Provider.of<ThemeChanger>(context, listen: false);
-            return DarkModeListController(
-                themeChanger, themeChanger.getDarkModeOption);
+            final themeChanger = Provider.of<ThemeChanger>(context, listen: false);
+            return DarkModeListController(themeChanger, themeChanger.getDarkModeOption);
           },
           update: (context, themeChanger, darkModeController) =>
-              DarkModeListController(
-                  themeChanger, themeChanger.getDarkModeOption),
+              DarkModeListController(themeChanger, themeChanger.getDarkModeOption),
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageListController(),
@@ -71,6 +82,8 @@ void main() async {
     ),
   );
 }
+
+class Firestore {}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -127,15 +140,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeLocales(List<Locale>? locales) async {
-    final languageController =
-        Provider.of<LanguageController>(context, listen: false);
+    final languageController = Provider.of<LanguageController>(context, listen: false);
     final savedLocalePreference = await languageController.loadLocalePreference();
 
     if (savedLocalePreference != locales![0]) {
       languageController.setLocale(savedLocalePreference);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
