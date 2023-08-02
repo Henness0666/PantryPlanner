@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "176562682480",
+    "project_id": "stuff-f365d",
+    "storage_bucket": "stuff-f365d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176562682480:android:d580f9a8065790c9d212b5",
+        "android_client_info": {
+          "package_name": "com.example.pantry_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176562682480-tkhob4puuo15aok3dt2gm9oposce2lot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcp3pgw8sSkEtgU9s8SNwbj3Gdb9Ui6o0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176562682480-tkhob4puuo15aok3dt2gm9oposce2lot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
