@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_screen.dart';
+import '../Widgets/base_screen.dart';
 
 class MealPlanningScreen extends StatelessWidget {
   const MealPlanningScreen({Key? key}) : super(key: key);

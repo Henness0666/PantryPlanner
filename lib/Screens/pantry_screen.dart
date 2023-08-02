@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_screen.dart';
+import '../Widgets/base_screen.dart';
 import '../Data Models/inventory_item.dart';
 
 class PantryScreen extends StatefulWidget {
@@ -76,9 +76,7 @@ class PantryScreenState extends State<PantryScreen> {
           },
           child: Text('Date Added'),
         ),
-        Text(dateAdded == null
-            ? 'No date selected'
-            : 'Selected date: ${_formatDate(dateAdded!)}'),
+        Text(dateAdded == null ? 'No date selected' : 'Selected date: ${_formatDate(dateAdded!)}'),
         SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
@@ -135,20 +133,17 @@ class PantryScreenState extends State<PantryScreen> {
     String name = nameController.text.trim();
     int quantity = int.tryParse(quantityController.text.trim()) ?? 0;
 
-    if (name.isNotEmpty &&
-        quantity > 0 &&
-        estimatedExpiration != null &&
-        dateAdded != null) {
+    if (name.isNotEmpty && quantity > 0 && estimatedExpiration != null && dateAdded != null) {
       FoodItem item = FoodItem(
         id: _nextItemId, // Assign the next item ID
         name: name,
         quantity: quantity,
         expiryDate: estimatedExpiration!,
-        dateAdded: dateAdded!, 
-        daysSinceAdded: 0, 
-        daysUntilExpiry: 123, 
-        isAddedRecently: true, 
-        isExpired: false, 
+        dateAdded: dateAdded!,
+        daysSinceAdded: 0,
+        daysUntilExpiry: 123,
+        isAddedRecently: true,
+        isExpired: false,
         isExpiringSoon: false,
       );
 

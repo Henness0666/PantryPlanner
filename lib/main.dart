@@ -1,27 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:pantry_app/Widgets/side_menu.dart';
-//import 'package:sqflite/sqflite.dart';
+import 'package:pantry_app/dynamic_theme.dart';
+import 'package:pantry_app/Screens/home_screen.dart';
+import 'package:pantry_app/Screens/pantry_screen.dart';
+import 'package:pantry_app/Screens/meal_planning_screen.dart';
+import 'package:pantry_app/Screens/shopping_list_screen.dart';
+import 'package:pantry_app/Screens/notifications_screen.dart';
+import 'package:pantry_app/Screens/food_tracking_screen.dart';
+import 'package:pantry_app/Screens/nutrition_analysis_screen.dart';
+import 'package:pantry_app/Screens/Settings/settings_screen.dart';
+import 'package:pantry_app/Screens/about_screen.dart';
+import 'package:pantry_app/Screens/help_screen.dart';
+import 'package:pantry_app/Screens/login_screen.dart';
+import 'package:pantry_app/Screens/register_screen.dart';
+import 'package:pantry_app/Screens/forgot_password_screen.dart';
+import 'package:pantry_app/Controllers/dark_mode_list.dart';
+import 'package:pantry_app/Controllers/language_list.dart';
+import 'package:pantry_app/Controllers/theme_changer.dart';
+import 'package:pantry_app/Controllers/language.dart';
 
-import '/Screens/home_screen.dart';
-import '/Screens/pantry_screen.dart';
-import '/Screens/meal_planning_screen.dart';
-import '/Screens/shopping_list_screen.dart';
-import '/Screens/notifications_screen.dart';
-import '/Screens/food_tracking_screen.dart';
-import '/Screens/nutrition_analysis_screen.dart';
-import 'Screens/settings_screen.dart';
-import '/Screens/about_screen.dart';
-import '/Screens/help_screen.dart';
-import '/Screens/login_screen.dart';
-import '/Screens/register_screen.dart';
-import '/Screens/forgot_password_screen.dart';
-
-void main() {
-  // Avoid errors caused by flutter upgrade.
-  // Importing 'package:flutter/widgets.dart' is required.
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //final db = openDatabase('0');
-  runApp(const MyApp());
+
+  // Load the saved theme preference
+  DarkModeOption savedThemePreference =
+      await ThemeChanger.loadThemePreference();
+
+  // Determine the initial theme
+  ThemeData initialTheme;
+  if (savedThemePreference == DarkModeOption.system) {
+    Brightness currentSystemBrightness =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness;
+    initialTheme = currentSystemBrightness == Brightness.dark
+        ? DynamicTheme.darkTheme
+        : DynamicTheme.lightTheme;
+  } else if (savedThemePreference == DarkModeOption.dark) {
+    initialTheme = DynamicTheme.darkTheme;
+  } else {
+    initialTheme = DynamicTheme.lightTheme;
+  }
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeChanger>(
+          create: (_) => ThemeChanger(
+            themeData: initialTheme,
+            darkModeOption: savedThemePreference,
+          ),
+        ),
+        ChangeNotifierProxyProvider<ThemeChanger, DarkModeListController>(
+          create: (context) {
+            final themeChanger =
+                Provider.of<ThemeChanger>(context, listen: false);
+            return DarkModeListController(
+                themeChanger, themeChanger.getDarkModeOption);
+          },
+          update: (context, themeChanger, darkModeController) =>
+              DarkModeListController(
+                  themeChanger, themeChanger.getDarkModeOption),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LanguageListController(),
+        ),
+        // Add more providers here if needed
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -31,7 +79,7 @@ class MyApp extends StatefulWidget {
   MyAppState createState() => MyAppState();
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final PageController _pageController = PageController(initialPage: 2);
   int _selectedIndex = 2;
 
@@ -55,25 +103,46 @@ class MyAppState extends State<MyApp> {
     _pageController.jumpToPage(index);
   }
 
-  // Define your light and dark themes here
-  final ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: Colors.blue,
-    // Other theme properties...
-  );
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
-  final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.blueGrey,
-    // Other theme properties...
-  );
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() async {
+    final themeChanger = Provider.of<ThemeChanger>(context, listen: false);
+    final darkModePreference = await ThemeChanger.loadThemePreference();
+
+    if (darkModePreference == DarkModeOption.system) {
+      themeChanger.setSystemTheme();
+    }
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) async {
+    final languageController =
+        Provider.of<LanguageController>(context, listen: false);
+    final savedLocalePreference = await languageController.loadLocalePreference();
+
+    if (savedLocalePreference != locales![0]) {
+      languageController.setLocale(savedLocalePreference);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
       title: 'Pantry Planner',
-      theme: lightTheme, // Your light theme
-      darkTheme: darkTheme, // Your dark theme
+      theme: theme.getTheme(),
       home: Scaffold(
         appBar: AppBar(
           title: Text(_pageTitleOptions[_selectedIndex]),
