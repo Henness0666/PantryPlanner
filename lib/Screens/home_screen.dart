@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'base_screen.dart';
+
+import 'package:pantry_app/Widgets/base_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -7,11 +8,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const BaseScreen(
-      title: 'Pantry Planner',
+      title: 'Alerts',
+      // The leading property defines the widget to display before the toolbar's title.
+      // It is often used to display a back button.
       body: Center(
         child: Text(
-          'Home/Dashboard content goes here',
-          style: TextStyle(fontSize: 24),
+          'Hello World!',
+          style: TextStyle(fontSize: 48),
         ),
       ),
     );
