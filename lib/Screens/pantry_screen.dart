@@ -144,7 +144,12 @@ class PantryScreenState extends State<PantryScreen> {
         name: name,
         quantity: quantity,
         expiryDate: estimatedExpiration!,
-        dateAdded: dateAdded!,
+        dateAdded: dateAdded!, 
+        daysSinceAdded: 0, 
+        daysUntilExpiry: 123, 
+        isAddedRecently: true, 
+        isExpired: false, 
+        isExpiringSoon: false,
       );
 
       setState(() {
