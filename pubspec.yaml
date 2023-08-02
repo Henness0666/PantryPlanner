@@ -38,6 +38,9 @@ dependencies:
   sqflite: ^2.2.8+4
   provider: ^6.0.5
   shared_preferences: ^2.2.0
+  font_awesome_flutter: ^10.5.0
+  package_info: ^2.0.2
+  device_info: ^2.0.3
 
 dev_dependencies:
   flutter_test:
