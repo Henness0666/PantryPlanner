@@ -34,6 +34,7 @@ dependencies:
   # Add firebase dependencies to utilize Google Cloud database services
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
+  flutterfire_ui: ^0.4.3+20
   cloud_firestore: ^4.8.4
 
   # The following adds the Cupertino Icons font to your application.
