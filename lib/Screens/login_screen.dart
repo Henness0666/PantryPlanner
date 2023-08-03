@@ -138,12 +138,42 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            SignInButton(
-              Buttons.apple,
+            // const SizedBox(height: 20),
+            // SignInButton(
+            //   Buttons.apple,
+            //   onPressed: () async {
+            //     await signInWithApple();
+            //   },
+            // ),
+            ElevatedButton(
               onPressed: () async {
                 await signInWithApple();
               },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Icon(
+                    FontAwesomeIcons.apple,
+                    size: 25.0,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'Sign in with Apple',
+                        style: TextStyle(
+                            fontFamily: 'Roboto', fontWeight: FontWeight.w400, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
