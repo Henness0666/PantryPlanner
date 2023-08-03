@@ -33,6 +33,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Using local emulator for Firebase Auth
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
   // Load the saved theme preference
   DarkModeOption savedThemePreference = await ThemeChanger.loadThemePreference();
 
@@ -203,7 +206,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/settings': (context) => const SettingsScreen(),
         '/about': (context) => const AboutScreen(),
         '/help': (context) => const HelpScreen(),
-        '/login': (context) => const LoginScreen(),
+        '/login': (context) => LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
       },
