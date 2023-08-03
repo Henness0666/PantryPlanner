@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class FoodItem {
-  final int id;
+  final String id;
   final String name;
   final int quantity;
   final DateTime expiryDate;

@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:pantry_app/Widgets/side_menu.dart';
 import 'package:pantry_app/dynamic_theme.dart';
 import 'package:pantry_app/Screens/home_screen.dart';
@@ -20,9 +20,27 @@ import 'package:pantry_app/Controllers/dark_mode_list.dart';
 import 'package:pantry_app/Controllers/language_list.dart';
 import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:pantry_app/Controllers/language.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:pantry_app/firebase_options.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    // Set your Firebase configuration
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Check if you are running in development mode (Local emulator)
+  bool isLocalEmulator = true; // Set this based on your app's environment
+  if (isLocalEmulator) {
+    // Set the storageBucket to the local emulator's host and port
+    await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+  }
 
   // Load the saved theme preference
   DarkModeOption savedThemePreference =

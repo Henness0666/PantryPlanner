@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_app/Data%20Models/database.dart';
 import '../Widgets/base_screen.dart';
 import '../Data Models/inventory_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../Data Models/database.dart';
 
 class PantryScreen extends StatefulWidget {
   const PantryScreen({Key? key}) : super(key: key);
@@ -10,7 +13,7 @@ class PantryScreen extends StatefulWidget {
 }
 
 class PantryScreenState extends State<PantryScreen> {
-  int _nextItemId = 0; // Variable to keep track of the next item ID
+  String _nextItemId = '0'; // Variable to keep track of the next item ID
   List<FoodItem> pantryItems = [];
 
   TextEditingController nameController = TextEditingController();
@@ -89,26 +92,53 @@ class PantryScreenState extends State<PantryScreen> {
   }
 
   Widget _buildPantryItemList() {
-    return ListView.builder(
-      itemCount: pantryItems.length,
-      itemBuilder: (context, index) {
-        final item = pantryItems[index];
-        return Card(
-          child: ListTile(
-            title: Text(item.name),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Quantity: ${item.quantity}'),
-                Text('Estimated Expiration: ${_formatDate(item.expiryDate)}'),
-                Text('Date Added: ${_formatDate(item.dateAdded)}'),
-              ],
-            ),
-          ),
+  return StreamBuilder<QuerySnapshot>(
+    // Replace 'pantry' with the name of your Firestore collection
+    stream: FirebaseFirestore.instance.collection('pantry').snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      }
+      if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}');
+      }
+
+      // Clear the local pantryItems list to avoid duplicate entries
+      pantryItems.clear();
+
+      // Add the items from Firestore to the local pantryItems list
+      for (DocumentSnapshot doc in snapshot.data!.docs) {
+        FoodItem item = FoodItem(
+          // Map the fields from Firestore to your FoodItem model
+          id: doc.id, // Assuming you use the document ID as the item ID
+          name: doc['name'],
+          quantity: doc['quantity'],
+          expiryDate: doc['expiryDate'].toDate(),
+          dateAdded: doc['dateAdded'].toDate(),
+          daysSinceAdded: 0,
+          daysUntilExpiry: 123,
+          isAddedRecently: true,
+          isExpired: false,
+          isExpiringSoon: false,
         );
-      },
-    );
-  }
+        pantryItems.add(item);
+      }
+
+      return ListView.builder(
+        itemCount: pantryItems.length,
+        itemBuilder: (context, index) {
+          final item = pantryItems[index];
+          return Card(
+            child: ListTile(
+              title: Text(item.name),
+              // ... (existing code)
+            ),
+          );
+        },
+      );
+    },
+  );
+}
 
   Future<void> _selectDate(BuildContext context, bool isExpirationDate) async {
     DateTime? selectedDate = await showDatePicker(
@@ -149,12 +179,15 @@ class PantryScreenState extends State<PantryScreen> {
 
       setState(() {
         pantryItems.add(item);
-        _nextItemId++; // Increment the next item ID for the next item to be added
+        // _nextItemId++; // Increment the next item ID for the next item to be added
         nameController.clear();
         quantityController.clear();
         estimatedExpiration = null;
         dateAdded = null;
       });
+
+      // Add the item to Firestore using the Firestore emulator
+      addDataToFirestore(item);
     } else {
       // Display an error or show a snackbar indicating that all fields are required
     }
