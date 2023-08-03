@@ -157,48 +157,61 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MaterialApp(
       title: 'Pantry Planner',
       theme: theme.getTheme(),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(_pageTitleOptions[_selectedIndex]),
-        ),
-        drawer: const SideMenu(),
-        body: PageView(
-          controller: _pageController,
-          children: _widgetOptions,
-          onPageChanged: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.kitchen),
-              label: 'Pantry',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Shopping List',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.restaurant_menu),
-              label: 'Meal Plan',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Alerts',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          unselectedItemColor: Colors.grey,
-          onTap: _onItemTapped,
-        ),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator(); // Show loading spinner while waiting for auth state
+          } else {
+            if (snapshot.hasData) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(_pageTitleOptions[_selectedIndex]),
+                ),
+                drawer: const SideMenu(),
+                body: PageView(
+                  controller: _pageController,
+                  children: _widgetOptions,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.kitchen),
+                      label: 'Pantry',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.list),
+                      label: 'Shopping List',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.restaurant_menu),
+                      label: 'Meal Plan',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.notifications),
+                      label: 'Alerts',
+                    ),
+                  ],
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.amber[800],
+                  unselectedItemColor: Colors.grey,
+                  onTap: _onItemTapped,
+                ),
+              );
+            } else {
+              return LoginScreen(); // User is not signed in, show login screen
+            }
+          }
+        },
       ),
       routes: {
         '/foodTracking': (context) => const FoodTrackingScreen(),
