@@ -138,7 +138,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // const SizedBox(height: 20),
+            const SizedBox(height: 10),
             // SignInButton(
             //   Buttons.apple,
             //   onPressed: () async {
@@ -167,14 +167,14 @@ class LoginScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Sign in with Apple',
-                        style: TextStyle(
-                            fontFamily: 'Roboto', fontWeight: FontWeight.w400, fontSize: 18),
+                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () async {
                 await signInAnonymously();
@@ -197,8 +197,7 @@ class LoginScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Sign in Anonymously',
-                        style: TextStyle(
-                            fontFamily: 'Roboto', fontWeight: FontWeight.w400, fontSize: 18),
+                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
                       ),
                     ),
                   ),
