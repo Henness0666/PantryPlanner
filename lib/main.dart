@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,7 @@ import 'package:pantry_app/Controllers/dark_mode_list.dart';
 import 'package:pantry_app/Controllers/language_list.dart';
 import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:pantry_app/Controllers/language.dart';
+import 'package:pantry_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pantry_app/firebase_options.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -28,8 +32,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
   await Firebase.initializeApp(
-    // Set your Firebase configuration
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
@@ -43,8 +47,7 @@ void main() async {
   }
 
   // Load the saved theme preference
-  DarkModeOption savedThemePreference =
-      await ThemeChanger.loadThemePreference();
+  DarkModeOption savedThemePreference = await ThemeChanger.loadThemePreference();
 
   // Determine the initial theme
   ThemeData initialTheme;
@@ -63,6 +66,12 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider<FirebaseAuth>(
+          create: (_) => FirebaseAuth.instance,
+        ),
+        Provider<FirebaseFirestore>(
+          create: (_) => FirebaseFirestore.instance,
+        ),
         ChangeNotifierProvider<ThemeChanger>(
           create: (_) => ThemeChanger(
             themeData: initialTheme,
@@ -71,14 +80,11 @@ void main() async {
         ),
         ChangeNotifierProxyProvider<ThemeChanger, DarkModeListController>(
           create: (context) {
-            final themeChanger =
-                Provider.of<ThemeChanger>(context, listen: false);
-            return DarkModeListController(
-                themeChanger, themeChanger.getDarkModeOption);
+            final themeChanger = Provider.of<ThemeChanger>(context, listen: false);
+            return DarkModeListController(themeChanger, themeChanger.getDarkModeOption);
           },
           update: (context, themeChanger, darkModeController) =>
-              DarkModeListController(
-                  themeChanger, themeChanger.getDarkModeOption),
+              DarkModeListController(themeChanger, themeChanger.getDarkModeOption),
         ),
         ChangeNotifierProvider(
           create: (context) => LanguageListController(),
@@ -89,6 +95,8 @@ void main() async {
     ),
   );
 }
+
+class Firestore {}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -145,8 +153,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeLocales(List<Locale>? locales) async {
-    final languageController =
-        Provider.of<LanguageController>(context, listen: false);
+    final languageController = Provider.of<LanguageController>(context, listen: false);
     final savedLocalePreference = await languageController.loadLocalePreference();
 
     if (savedLocalePreference != locales![0]) {
@@ -154,55 +161,67 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
       title: 'Pantry Planner',
       theme: theme.getTheme(),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(_pageTitleOptions[_selectedIndex]),
-        ),
-        drawer: const SideMenu(),
-        body: PageView(
-          controller: _pageController,
-          children: _widgetOptions,
-          onPageChanged: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.kitchen),
-              label: 'Pantry',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Shopping List',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.restaurant_menu),
-              label: 'Meal Plan',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Alerts',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          unselectedItemColor: Colors.grey,
-          onTap: _onItemTapped,
-        ),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator(); // Show loading spinner while waiting for auth state
+          } else {
+            if (snapshot.hasData) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(_pageTitleOptions[_selectedIndex]),
+                ),
+                drawer: const SideMenu(),
+                body: PageView(
+                  controller: _pageController,
+                  children: _widgetOptions,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.kitchen),
+                      label: 'Pantry',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.list),
+                      label: 'Shopping List',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.restaurant_menu),
+                      label: 'Meal Plan',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.notifications),
+                      label: 'Alerts',
+                    ),
+                  ],
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.amber[800],
+                  unselectedItemColor: Colors.grey,
+                  onTap: _onItemTapped,
+                ),
+              );
+            } else {
+              return LoginScreen(); // User is not signed in, show login screen
+            }
+          }
+        },
       ),
       routes: {
         '/foodTracking': (context) => const FoodTrackingScreen(),
@@ -210,7 +229,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/settings': (context) => const SettingsScreen(),
         '/about': (context) => const AboutScreen(),
         '/help': (context) => const HelpScreen(),
-        '/login': (context) => const LoginScreen(),
+        '/login': (context) => LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
       },
