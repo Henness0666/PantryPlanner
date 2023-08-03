@@ -11,46 +11,61 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          const SizedBox(height: 100),
-          const Center(
-            child: Text(
-              'Pantry Planner',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 100),
-          const Center(
-            child: Text(
-              'Sign in to continue',
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            const Text(
+              'Welcome to Pantry Planner! Please sign in to continue',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          const SizedBox(height: 100),
-          Center(
-            child: ElevatedButton(
+            const SizedBox(height: 50),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Enter your email',
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                // TODO: Implement forgot password functionality
+              },
+              child: const Text('Forgot password?'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
               onPressed: () async {
                 await signInWithGoogle();
               },
-              child: const Text('Sign in with Google'),
+              child: const Text('Sign in'),
             ),
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                await signInWithApple();
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                // TODO: Implement registration functionality
               },
-              child: const Text('Sign in with Apple'),
+              child: const Text("Don't have an account? Register"),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            const Text(
+              'By signing in, you agree to our terms and conditions',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
