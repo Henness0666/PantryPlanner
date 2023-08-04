@@ -2,22 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/login_screen.dart';
 import 'package:pantry_app/Widgets/side_menu.dart';
+import 'package:pantry_app/Screens/notifications_screen.dart';
 
 class AuthStreamBuilder extends StatefulWidget {
   final List<Widget> _widgetOptions;
   final List<String> _pageTitleOptions;
 
-  AuthStreamBuilder({
+  const AuthStreamBuilder({
+    super.key,
     required List<Widget> widgetOptions,
     required List<String> pageTitleOptions,
   })  : _widgetOptions = widgetOptions,
         _pageTitleOptions = pageTitleOptions;
 
   @override
-  _AuthStreamBuilderState createState() => _AuthStreamBuilderState();
+  AuthStreamBuilderState createState() => AuthStreamBuilderState();
 }
 
-class _AuthStreamBuilderState extends State<AuthStreamBuilder> {
+class AuthStreamBuilderState extends State<AuthStreamBuilder> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(2);
   final PageController _pageController = PageController(initialPage: 2);
 
@@ -45,12 +47,65 @@ class _AuthStreamBuilderState extends State<AuthStreamBuilder> {
         } else {
           if (snapshot.hasData) {
             return Scaffold(
-              appBar: AppBar(
-                title: ValueListenableBuilder<int>(
-                  valueListenable: _selectedIndex,
-                  builder: (context, value, child) {
-                    return Text(widget._pageTitleOptions[value]);
-                  },
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Hero(
+                  tag: 'appBar',
+                  child: AppBar(
+                    title: ValueListenableBuilder<int>(
+                      valueListenable: _selectedIndex,
+                      builder: (context, value, child) {
+                        return Text(widget._pageTitleOptions[value]);
+                      },
+                    ),
+                    centerTitle: true,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.notifications),
+                        onPressed: () {
+                          showGeneralDialog(
+                            context: context,
+                            pageBuilder: (context, animation, secondaryAnimation) =>
+                                const NotificationsScreen(),
+                            barrierDismissible: false,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            transitionDuration: const Duration(milliseconds: 250),
+                            transitionBuilder: (context, animation, secondaryAnimation, child) {
+                              return Stack(
+                                children: [
+                                  SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0, -1),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  ),
+                                  Positioned(
+                                    top: 0.0,
+                                    left: 0.0,
+                                    right: 0.0,
+                                    child: AppBar(
+                                      automaticallyImplyLeading: false,
+                                      title: const Text('Notifications'),
+                                      centerTitle: true,
+                                      actions: <Widget>[
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               drawer: const SideMenu(),
