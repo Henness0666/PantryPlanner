@@ -5,15 +5,16 @@ import 'package:pantry_app/Widgets/side_menu.dart';
 import 'package:pantry_app/Screens/notifications_screen.dart';
 
 class AuthStreamBuilder extends StatefulWidget {
-  final List<Widget> _widgetOptions;
-  final List<String> _pageTitleOptions;
-
   const AuthStreamBuilder({
-    super.key,
-    required List<Widget> widgetOptions,
-    required List<String> pageTitleOptions,
-  })  : _widgetOptions = widgetOptions,
-        _pageTitleOptions = pageTitleOptions;
+    Key? key,
+    required this.widgetOptions,
+    required this.pageTitleOptions,
+  }) : super(key: key);
+
+  final List<Widget> widgetOptions;
+  final List<String> pageTitleOptions;
+
+  static final globalKey = GlobalKey<AuthStreamBuilderState>();
 
   @override
   AuthStreamBuilderState createState() => AuthStreamBuilderState();
@@ -37,12 +38,8 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
     super.dispose();
   }
 
-  Future<void> _signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-    } catch (e) {
-      print(e); // Optionally catch errors and handle them
-    }
+  void rebuild() {
+    setState(() {});
   }
 
   @override
@@ -63,7 +60,7 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                     title: ValueListenableBuilder<int>(
                       valueListenable: _selectedIndex,
                       builder: (context, value, child) {
-                        return Text(widget._pageTitleOptions[value]);
+                        return Text(widget.pageTitleOptions[value]);
                       },
                     ),
                     centerTitle: true,
@@ -116,10 +113,10 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                   ),
                 ),
               ),
-              drawer: SideMenu(signOut: _signOut),
+              drawer: SideMenu(rebuild: rebuild),
               body: PageView(
                 controller: _pageController,
-                children: widget._widgetOptions,
+                children: widget.widgetOptions,
                 onPageChanged: (index) {
                   _selectedIndex.value = index;
                 },

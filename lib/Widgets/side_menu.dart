@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
-  final VoidCallback signOut;
+  final VoidCallback rebuild;
 
-  const SideMenu({Key? key, required this.signOut}) : super(key: key);
+  const SideMenu({Key? key, required this.rebuild}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsScreen(signOut: signOut),
+                      builder: (context) => SettingsScreen(rebuild: rebuild),
                     ),
                   );
                 },

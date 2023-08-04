@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info/package_info.dart';
@@ -10,15 +11,19 @@ import 'package:pantry_app/Screens/Settings/privacy_settings.dart';
 import 'package:pantry_app/Utils/navigation_utils.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final VoidCallback signOut;
+  final VoidCallback rebuild;
 
-  const SettingsScreen({Key? key, required this.signOut}) : super(key: key);
+  SettingsScreen({required this.rebuild});
 
   @override
-  SettingsScreenState createState() => SettingsScreenState();
+  _SettingsScreenState createState() => _SettingsScreenState(rebuild: rebuild);
 }
 
-class SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen> {
+  final VoidCallback rebuild;
+
+  _SettingsScreenState({required this.rebuild});
+
   String appVersion = '';
   String osVersion = '';
 
@@ -42,6 +47,11 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
 
     setState(() {});
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    rebuild();
   }
 
   @override
@@ -151,14 +161,18 @@ class SettingsScreenState extends State<SettingsScreen> {
             title: const Text('Logout'),
             trailing: const Icon(Icons.logout),
             onTap: () async {
-              final confirm = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('Confirm Logout'),
                   content: const Text('Are you sure you want to logout?'),
                   actions: <Widget>[
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).pop();
+                        _signOut();
+                      },
                       child: const Text('Yes'),
                     ),
                     TextButton(
@@ -168,12 +182,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               );
-
-              if (confirm) {
-                widget.signOut(); // Call the signOut method passed from AuthStreamBuilder
-              }
             },
           ),
+
           const Divider(),
           //Row of just the social media icons with no text, linking to the respective social media pages
           Row(

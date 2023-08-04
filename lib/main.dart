@@ -140,6 +140,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       title: 'Pantry Planner',
       theme: theme.getTheme(),
       home: AuthStreamBuilder(
+        key: AuthStreamBuilder.globalKey,
         widgetOptions: _widgetOptions,
         pageTitleOptions: _pageTitleOptions,
       ),
