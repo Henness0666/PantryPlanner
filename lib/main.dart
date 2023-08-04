@@ -1,34 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pantry_app/auth_stream_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:pantry_app/Widgets/side_menu.dart';
 import 'package:pantry_app/dynamic_theme.dart';
-import 'package:pantry_app/Screens/home_screen.dart';
+import 'package:pantry_app/Screens/activity_feed_screen.dart';
 import 'package:pantry_app/Screens/pantry_screen.dart';
 import 'package:pantry_app/Screens/meal_planning_screen.dart';
 import 'package:pantry_app/Screens/shopping_list_screen.dart';
-import 'package:pantry_app/Screens/notifications_screen.dart';
-import 'package:pantry_app/Screens/food_tracking_screen.dart';
-import 'package:pantry_app/Screens/nutrition_analysis_screen.dart';
-import 'package:pantry_app/Screens/Settings/settings_screen.dart';
-import 'package:pantry_app/Screens/about_screen.dart';
-import 'package:pantry_app/Screens/help_screen.dart';
-import 'package:pantry_app/Screens/login_screen.dart';
-import 'package:pantry_app/Screens/register_screen.dart';
-import 'package:pantry_app/Screens/forgot_password_screen.dart';
 import 'package:pantry_app/Controllers/dark_mode_list.dart';
 import 'package:pantry_app/Controllers/language_list.dart';
 import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:pantry_app/Controllers/language.dart';
 import 'package:pantry_app/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:pantry_app/firebase_options.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pantry_app/Screens/recipes_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -108,42 +95,22 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final PageController _pageController = PageController(initialPage: 2);
-  int _selectedIndex = 2;
 
   final List<Widget> _widgetOptions = [
-    const PantryScreen(), // Pantry Screen
-    const ShoppingListScreen(), // Shopping List Screen
-    const HomeScreen(), // Home/Dashboard Screen
     const MealPlanningScreen(), // Meal Planning Screen
-    const NotificationsScreen(), // Notifications Screen
+    const ShoppingListScreen(), // Shopping List Screen
+    const ActivityFeedScreen(), // Home/Dashboard Screen
+    const PantryScreen(), // Pantry Screen
+    const RecipesScreen(), // Notifications Screen
   ];
 
   final List<String> _pageTitleOptions = [
-    'Pantry', // Pantry Screen
-    'Shopping List', // Shopping List Screen
-    'Home', // Home/Dashboard Screen
-    'Meal Plan', // Meal Planning Screen
-    'Alerts', // Notifications Screen
+    'Meal Plans', // Meal Planning Screen
+    'Shopping Lists', // Shopping List Screen
+    'Activity Feed', // Home/Dashboard Screen
+    'Pantries', // Pantry Screen
+    'Recipes', // Notifications Screen
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    _pageController.jumpToPage(index);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
 
   @override
   void didChangePlatformBrightness() async {
@@ -172,12 +139,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       title: 'Pantry Planner',
       theme: theme.getTheme(),
       home: AuthStreamBuilder(
-        pageController: _pageController,
         widgetOptions: _widgetOptions,
         pageTitleOptions: _pageTitleOptions,
-        onItemTapped: _onItemTapped,
-        selectedIndex: _selectedIndex,
       ),
+      // ...
     );
   }
 }

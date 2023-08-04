@@ -3,24 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/login_screen.dart';
 import 'package:pantry_app/Widgets/side_menu.dart';
 
-class AuthStreamBuilder extends StatelessWidget {
-  final PageController _pageController;
+class AuthStreamBuilder extends StatefulWidget {
   final List<Widget> _widgetOptions;
   final List<String> _pageTitleOptions;
-  final void Function(int) _onItemTapped;
-  int _selectedIndex;
 
   AuthStreamBuilder({
-    required PageController pageController,
     required List<Widget> widgetOptions,
     required List<String> pageTitleOptions,
-    required void Function(int) onItemTapped,
-    required int selectedIndex,
-  })  : _pageController = pageController,
-        _widgetOptions = widgetOptions,
-        _pageTitleOptions = pageTitleOptions,
-        _onItemTapped = onItemTapped,
-        _selectedIndex = selectedIndex;
+  })  : _widgetOptions = widgetOptions,
+        _pageTitleOptions = pageTitleOptions;
+
+  @override
+  _AuthStreamBuilderState createState() => _AuthStreamBuilderState();
+}
+
+class _AuthStreamBuilderState extends State<AuthStreamBuilder> {
+  final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(2);
+  final PageController _pageController = PageController(initialPage: 2);
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      _selectedIndex.value = _pageController.page!.round();
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,43 +46,56 @@ class AuthStreamBuilder extends StatelessWidget {
           if (snapshot.hasData) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(_pageTitleOptions[_selectedIndex]),
+                title: ValueListenableBuilder<int>(
+                  valueListenable: _selectedIndex,
+                  builder: (context, value, child) {
+                    return Text(widget._pageTitleOptions[value]);
+                  },
+                ),
               ),
               drawer: const SideMenu(),
               body: PageView(
                 controller: _pageController,
-                children: _widgetOptions,
+                children: widget._widgetOptions,
                 onPageChanged: (index) {
-                  _selectedIndex = index;
+                  _selectedIndex.value = index;
                 },
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.kitchen),
-                    label: 'Pantry',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.list),
-                    label: 'Shopping List',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.restaurant_menu),
-                    label: 'Meal Plan',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.notifications),
-                    label: 'Alerts',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Colors.amber[800],
-                unselectedItemColor: Colors.grey,
-                onTap: _onItemTapped,
+              bottomNavigationBar: ValueListenableBuilder<int>(
+                valueListenable: _selectedIndex,
+                builder: (context, value, child) {
+                  return BottomNavigationBar(
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.restaurant_menu),
+                        label: 'Meal Plans',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.list),
+                        label: 'Shopping Lists',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.dashboard),
+                        label: 'Feed',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.kitchen),
+                        label: 'Pantries',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.receipt),
+                        label: 'Recipes',
+                      ),
+                    ],
+                    currentIndex: value,
+                    selectedItemColor: Colors.amber[800],
+                    unselectedItemColor: Colors.grey,
+                    onTap: (index) {
+                      _selectedIndex.value = index;
+                      _pageController.jumpToPage(index);
+                    },
+                  );
+                },
               ),
             );
           } else {
