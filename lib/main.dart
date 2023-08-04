@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pantry_app/auth_stream_builder.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pantry_app/Widgets/side_menu.dart';
@@ -116,6 +117,9 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   ];
 
   void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
     _pageController.jumpToPage(index);
   }
 
@@ -157,72 +161,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MaterialApp(
       title: 'Pantry Planner',
       theme: theme.getTheme(),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator(); // Show loading spinner while waiting for auth state
-          } else {
-            if (snapshot.hasData) {
-              return Scaffold(
-                appBar: AppBar(
-                  title: Text(_pageTitleOptions[_selectedIndex]),
-                ),
-                drawer: const SideMenu(),
-                body: PageView(
-                  controller: _pageController,
-                  children: _widgetOptions,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  },
-                ),
-                bottomNavigationBar: BottomNavigationBar(
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.kitchen),
-                      label: 'Pantry',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.list),
-                      label: 'Shopping List',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.restaurant_menu),
-                      label: 'Meal Plan',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.notifications),
-                      label: 'Alerts',
-                    ),
-                  ],
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: Colors.amber[800],
-                  unselectedItemColor: Colors.grey,
-                  onTap: _onItemTapped,
-                ),
-              );
-            } else {
-              return LoginScreen(); // User is not signed in, show login screen
-            }
-          }
-        },
+      home: AuthStreamBuilder(
+        pageController: _pageController,
+        widgetOptions: _widgetOptions,
+        pageTitleOptions: _pageTitleOptions,
+        onItemTapped: _onItemTapped,
+        selectedIndex: _selectedIndex,
       ),
-      routes: {
-        '/foodTracking': (context) => const FoodTrackingScreen(),
-        '/nutritionAnalysis': (context) => const NutritionAnalysisScreen(),
-        '/settings': (context) => const SettingsScreen(),
-        '/about': (context) => const AboutScreen(),
-        '/help': (context) => const HelpScreen(),
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/forgotPassword': (context) => const ForgotPasswordScreen(),
-      },
     );
   }
 }
