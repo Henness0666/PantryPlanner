@@ -1,8 +1,4 @@
 // Purpose: Defines the FoodItem class, which is used to represent a single food item in the inventory.
-
-import 'package:flutter/material.dart';
-
-
 class FoodItem {
   final String id;
   final String name;

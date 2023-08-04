@@ -3,7 +3,6 @@ import 'package:pantry_app/Data%20Models/database.dart';
 import '../Widgets/base_screen.dart';
 import '../Data Models/inventory_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Data Models/database.dart';
 
 class PantryScreen extends StatefulWidget {
   const PantryScreen({Key? key}) : super(key: key);
