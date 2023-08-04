@@ -147,7 +147,6 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       routes: {
         '/foodTracking': (context) => const FoodTrackingScreen(),
         '/nutritionAnalysis': (context) => const NutritionAnalysisScreen(),
-        '/settings': (context) => const SettingsScreen(),
         '/help': (context) => const HelpScreen(),
       },
     );

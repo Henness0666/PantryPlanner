@@ -37,6 +37,14 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
     super.dispose();
   }
 
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      print(e); // Optionally catch errors and handle them
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -108,7 +116,9 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                   ),
                 ),
               ),
-              drawer: const SideMenu(),
+              drawer: SideMenu(
+                signOut: _signOut,
+              ),
               body: PageView(
                 controller: _pageController,
                 children: widget._widgetOptions,

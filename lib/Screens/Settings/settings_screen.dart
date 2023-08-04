@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
 
 import 'package:pantry_app/Screens/Settings/account_settings.dart';
@@ -10,13 +12,15 @@ import 'package:pantry_app/Screens/Settings/privacy_settings.dart';
 import 'package:pantry_app/Utils/navigation_utils.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  final VoidCallback signOut;
+
+  const SettingsScreen({Key? key, required this.signOut}) : super(key: key);
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
+  SettingsScreenState createState() => SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class SettingsScreenState extends State<SettingsScreen> {
   String appVersion = '';
   String osVersion = '';
 
@@ -44,6 +48,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = Provider.of<FirebaseAuth>(context); // Get the AuthBloc from the context
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -146,12 +152,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const Divider(),
           ListTile(
-            title: const Text(
-              'Logout',
-            ),
-            trailing: const Icon(
-              Icons.logout,
-            ),
+            title: const Text('Logout'),
+            trailing: const Icon(Icons.logout),
             onTap: () async {
               final confirm = await showDialog(
                 context: context,
@@ -172,7 +174,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
 
               if (confirm) {
-                //TODO: Logout
+                widget.signOut(); // Call the signOut method passed from AuthStreamBuilder
               }
             },
           ),
