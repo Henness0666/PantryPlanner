@@ -130,7 +130,13 @@ class PantryScreenState extends State<PantryScreen> {
           return Card(
             child: ListTile(
               title: Text(item.name),
-              // ... (existing code)
+              subtitle: Text('Quantity: ${item.quantity}'),
+              trailing: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  deleteDataFromFirestore();
+                },
+              ),
             ),
           );
         },

@@ -1,3 +1,7 @@
+/// We now have persistent data storage while using the emulators!
+/// To import the database on emulator startup and export the database on emulator shutdown
+/// Run the following command: firebase emulators:start --import databaseData --export-on-exit
+
 import 'dart:async';
 import 'inventory_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
   Future<void> addDataToFirestore(FoodItem item) async {
     try {
     // Replace 'pantry' with the name of your Firestore collection
-    CollectionReference pantryCollection = FirebaseFirestore.instance.collection('root');
+    CollectionReference pantryCollection = FirebaseFirestore.instance.collection('pantry');
     pantryCollection.add({
       'name': item.name,
       'quantity': item.quantity,
@@ -49,8 +53,8 @@ Future<void> updateDataInFirestore() async {
 // Deleting data from Firestore
 Future<void> deleteDataFromFirestore() async {
   try {
-    CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
-    await usersCollection.doc('user_id').delete();
+    CollectionReference usersCollection = FirebaseFirestore.instance.collection('pantry');
+    await usersCollection.doc('name').delete();
     print('Data deleted from Firestore!');
   } catch (e) {
     print('Error deleting data from Firestore: $e');
