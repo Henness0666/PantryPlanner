@@ -76,7 +76,7 @@ class _AuthStreamBuilderState extends State<AuthStreamBuilder> {
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.dashboard),
-                        label: 'Feed',
+                        label: 'Activity Feed',
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.kitchen),
