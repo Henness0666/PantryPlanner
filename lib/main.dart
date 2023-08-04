@@ -100,18 +100,18 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final List<Widget> _widgetOptions = [
     const MealPlanningScreen(), // Meal Planning Screen
-    const ShoppingListScreen(), // Shopping List Screen
+    const RecipesScreen(), // Notifications Screen
     const ActivityFeedScreen(), // Home/Dashboard Screen
     const PantryScreen(), // Pantry Screen
-    const RecipesScreen(), // Notifications Screen
+    const ShoppingListScreen(), // Shopping List Screen
   ];
 
   final List<String> _pageTitleOptions = [
     'Meal Plans', // Meal Planning Screen
-    'Shopping Lists', // Shopping List Screen
+    'Recipes', // Notifications Screen
     'Activity Feed', // Home/Dashboard Screen
     'Pantries', // Pantry Screen
-    'Recipes', // Notifications Screen
+    'Shopping Lists', // Shopping List Screen
   ];
 
   @override

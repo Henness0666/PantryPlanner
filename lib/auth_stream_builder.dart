@@ -126,8 +126,8 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                         label: 'Meal Plans',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.list),
-                        label: 'Shopping Lists',
+                        icon: Icon(Icons.receipt),
+                        label: 'Recipes',
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.dashboard),
@@ -138,8 +138,8 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                         label: 'Pantries',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.receipt),
-                        label: 'Recipes',
+                        icon: Icon(Icons.list),
+                        label: 'Shopping Lists',
                       ),
                     ],
                     currentIndex: value,
