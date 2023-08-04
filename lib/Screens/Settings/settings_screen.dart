@@ -11,19 +11,13 @@ import 'package:pantry_app/Screens/Settings/privacy_settings.dart';
 import 'package:pantry_app/Utils/navigation_utils.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final VoidCallback rebuild;
-
-  SettingsScreen({required this.rebuild});
+  const SettingsScreen({super.key});
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState(rebuild: rebuild);
+  SettingsScreenState createState() => SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
-  final VoidCallback rebuild;
-
-  _SettingsScreenState({required this.rebuild});
-
+class SettingsScreenState extends State<SettingsScreen> {
   String appVersion = '';
   String osVersion = '';
 
@@ -51,7 +45,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _signOut() async {
     await FirebaseAuth.instance.signOut();
-    rebuild();
   }
 
   @override

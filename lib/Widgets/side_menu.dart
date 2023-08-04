@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
-  final VoidCallback rebuild;
-
-  const SideMenu({Key? key, required this.rebuild}) : super(key: key);
+  const SideMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +51,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsScreen(rebuild: rebuild),
+                      builder: (context) => SettingsScreen(),
                     ),
                   );
                 },

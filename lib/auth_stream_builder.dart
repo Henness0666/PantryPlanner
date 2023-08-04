@@ -38,10 +38,6 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
     super.dispose();
   }
 
-  void rebuild() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -113,7 +109,7 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                   ),
                 ),
               ),
-              drawer: SideMenu(rebuild: rebuild),
+              drawer: SideMenu(),
               body: PageView(
                 controller: _pageController,
                 children: widget.widgetOptions,
