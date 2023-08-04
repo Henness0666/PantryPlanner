@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pantry_app/auth_stream_builder.dart';
 import 'package:provider/provider.dart';
-
 import 'package:pantry_app/Widgets/side_menu.dart';
 import 'package:pantry_app/dynamic_theme.dart';
 import 'package:pantry_app/Screens/home_screen.dart';
@@ -25,6 +25,10 @@ import 'package:pantry_app/Controllers/language_list.dart';
 import 'package:pantry_app/Controllers/theme_changer.dart';
 import 'package:pantry_app/Controllers/language.dart';
 import 'package:pantry_app/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:pantry_app/firebase_options.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,8 +38,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Using local emulator for Firebase Auth
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  // Check if you are running in development mode (Local emulator)
+  bool isLocalEmulator = true; // Set this based on your app's environment
+  if (isLocalEmulator) {
+    // Set the storageBucket to the local emulator's host and port
+    await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+  }
 
   // Load the saved theme preference
   DarkModeOption savedThemePreference = await ThemeChanger.loadThemePreference();
