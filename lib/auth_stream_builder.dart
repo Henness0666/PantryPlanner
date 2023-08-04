@@ -116,9 +116,7 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                   ),
                 ),
               ),
-              drawer: SideMenu(
-                signOut: _signOut,
-              ),
+              drawer: SideMenu(signOut: _signOut),
               body: PageView(
                 controller: _pageController,
                 children: widget._widgetOptions,

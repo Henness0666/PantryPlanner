@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({Key? key}) : super(key: key);
+  final VoidCallback signOut;
+
+  const SideMenu({Key? key, required this.signOut}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +54,12 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsScreen(signOut: _signOut),
+                      builder: (context) => SettingsScreen(signOut: signOut),
                     ),
                   );
                 },
               ),
+
               ListTile(
                 leading: const Icon(Icons.help),
                 title: const Text('Help & Feedback'),
