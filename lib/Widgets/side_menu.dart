@@ -9,7 +9,6 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // Your drawer contents...
       child: Column(
         children: [
           Expanded(
@@ -59,7 +58,6 @@ class SideMenu extends StatelessWidget {
                   );
                 },
               ),
-
               ListTile(
                 leading: const Icon(Icons.help),
                 title: const Text('Help & Feedback'),

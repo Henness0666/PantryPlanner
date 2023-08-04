@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
-import 'package:provider/provider.dart';
 import 'dart:io';
 
 import 'package:pantry_app/Screens/Settings/account_settings.dart';
@@ -48,8 +46,6 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = Provider.of<FirebaseAuth>(context); // Get the AuthBloc from the context
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),

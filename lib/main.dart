@@ -16,7 +16,6 @@ import 'package:pantry_app/Controllers/language.dart';
 import 'package:pantry_app/firebase_options.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pantry_app/Screens/recipes_screen.dart';
-import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 import 'package:pantry_app/Screens/help_screen.dart';
 import 'package:pantry_app/Screens/food_tracking_screen.dart';
 import 'package:pantry_app/Screens/nutrition_analysis_screen.dart';
