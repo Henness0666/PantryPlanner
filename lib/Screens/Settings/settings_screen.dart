@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           ListTile(
-            title: const Text('Billing'),
+            title: const Text('Subscriptions'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               //TODO: Navigate to billing screen.

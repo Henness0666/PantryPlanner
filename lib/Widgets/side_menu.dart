@@ -57,7 +57,7 @@ class SideMenu extends StatelessWidget {
                 title: const Text('Help & Feedback'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/about');
+                  Navigator.pushNamed(context, '/help');
                 },
               ),
             ],
