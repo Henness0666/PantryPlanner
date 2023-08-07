@@ -2,25 +2,41 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/login_screen.dart';
 import 'package:pantry_app/Widgets/side_menu.dart';
+import 'package:pantry_app/Screens/notifications_screen.dart';
 
-class AuthStreamBuilder extends StatelessWidget {
-  final PageController _pageController;
-  final List<Widget> _widgetOptions;
-  final List<String> _pageTitleOptions;
-  final void Function(int) _onItemTapped;
-  int _selectedIndex;
+class AuthStreamBuilder extends StatefulWidget {
+  const AuthStreamBuilder({
+    Key? key,
+    required this.widgetOptions,
+    required this.pageTitleOptions,
+  }) : super(key: key);
 
-  AuthStreamBuilder({
-    required PageController pageController,
-    required List<Widget> widgetOptions,
-    required List<String> pageTitleOptions,
-    required void Function(int) onItemTapped,
-    required int selectedIndex,
-  })  : _pageController = pageController,
-        _widgetOptions = widgetOptions,
-        _pageTitleOptions = pageTitleOptions,
-        _onItemTapped = onItemTapped,
-        _selectedIndex = selectedIndex;
+  final List<Widget> widgetOptions;
+  final List<String> pageTitleOptions;
+
+  static final globalKey = GlobalKey<AuthStreamBuilderState>();
+
+  @override
+  AuthStreamBuilderState createState() => AuthStreamBuilderState();
+}
+
+class AuthStreamBuilderState extends State<AuthStreamBuilder> {
+  final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(2);
+  final PageController _pageController = PageController(initialPage: 2);
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      _selectedIndex.value = _pageController.page!.round();
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,44 +48,110 @@ class AuthStreamBuilder extends StatelessWidget {
         } else {
           if (snapshot.hasData) {
             return Scaffold(
-              appBar: AppBar(
-                title: Text(_pageTitleOptions[_selectedIndex]),
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Hero(
+                  tag: 'appBar',
+                  child: AppBar(
+                    title: ValueListenableBuilder<int>(
+                      valueListenable: _selectedIndex,
+                      builder: (context, value, child) {
+                        return Text(widget.pageTitleOptions[value]);
+                      },
+                    ),
+                    centerTitle: true,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.notifications),
+                        onPressed: () {
+                          showGeneralDialog(
+                            context: context,
+                            pageBuilder: (context, animation, secondaryAnimation) =>
+                                const NotificationsScreen(),
+                            barrierDismissible: false,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            transitionDuration: const Duration(milliseconds: 250),
+                            transitionBuilder: (context, animation, secondaryAnimation, child) {
+                              return Stack(
+                                children: [
+                                  SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0, -1),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  ),
+                                  Positioned(
+                                    top: 0.0,
+                                    left: 0.0,
+                                    right: 0.0,
+                                    child: AppBar(
+                                      automaticallyImplyLeading: false,
+                                      title: const Text('Notifications'),
+                                      centerTitle: true,
+                                      actions: <Widget>[
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              drawer: const SideMenu(),
+              drawer: SideMenu(),
               body: PageView(
                 controller: _pageController,
-                children: _widgetOptions,
+                children: widget.widgetOptions,
                 onPageChanged: (index) {
-                  _selectedIndex = index;
+                  _selectedIndex.value = index;
                 },
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.kitchen),
-                    label: 'Pantry',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.list),
-                    label: 'Shopping List',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.restaurant_menu),
-                    label: 'Meal Plan',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.notifications),
-                    label: 'Alerts',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Colors.amber[800],
-                unselectedItemColor: Colors.grey,
-                onTap: _onItemTapped,
+              bottomNavigationBar: ValueListenableBuilder<int>(
+                valueListenable: _selectedIndex,
+                builder: (context, value, child) {
+                  return BottomNavigationBar(
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.restaurant_menu),
+                        label: 'Meal Plans',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.receipt),
+                        label: 'Recipes',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.dashboard),
+                        label: 'Activity Feed',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.kitchen),
+                        label: 'Pantries',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.list),
+                        label: 'Shopping Lists',
+                      ),
+                    ],
+                    currentIndex: value,
+                    selectedItemColor: Colors.amber[800],
+                    unselectedItemColor: Colors.grey,
+                    onTap: (index) {
+                      _selectedIndex.value = index;
+                      _pageController.jumpToPage(index);
+                    },
+                  );
+                },
               ),
             );
           } else {

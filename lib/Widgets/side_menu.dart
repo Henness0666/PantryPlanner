@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({Key? key}) : super(key: key);
+  const SideMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // Your drawer contents...
       child: Column(
         children: [
           Expanded(
@@ -48,8 +48,12 @@ class SideMenu extends StatelessWidget {
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/settings');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingsScreen(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -57,7 +61,7 @@ class SideMenu extends StatelessWidget {
                 title: const Text('Help & Feedback'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/about');
+                  Navigator.pushNamed(context, '/help');
                 },
               ),
             ],

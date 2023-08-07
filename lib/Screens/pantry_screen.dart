@@ -12,7 +12,7 @@ class PantryScreen extends StatefulWidget {
 }
 
 class PantryScreenState extends State<PantryScreen> {
-  String _nextItemId = '0'; // Variable to keep track of the next item ID
+  final String _nextItemId = '0'; // Variable to keep track of the next item ID
   List<FoodItem> pantryItems = [];
 
   TextEditingController nameController = TextEditingController();
@@ -23,7 +23,7 @@ class PantryScreenState extends State<PantryScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'Pantry',
+      title: 'Pantries',
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -53,75 +53,75 @@ class PantryScreenState extends State<PantryScreen> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Name'),
+          decoration: const InputDecoration(labelText: 'Name'),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         TextField(
           controller: quantityController,
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(labelText: 'Quantity'),
+          decoration: const InputDecoration(labelText: 'Quantity'),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () async {
             await _selectDate(context, true);
           },
-          child: Text('Estimated Expiration'),
+          child: const Text('Estimated Expiration'),
         ),
         Text(estimatedExpiration == null
             ? 'No date selected'
             : 'Selected date: ${_formatDate(estimatedExpiration!)}'),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () async {
             await _selectDate(context, false);
           },
-          child: Text('Date Added'),
+          child: const Text('Date Added'),
         ),
         Text(dateAdded == null ? 'No date selected' : 'Selected date: ${_formatDate(dateAdded!)}'),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
             _addItemToDatabase();
           },
-          child: Text('Add Item'),
+          child: const Text('Add Item'),
         ),
       ],
     );
   }
 
   Widget _buildPantryItemList() {
-  return StreamBuilder<QuerySnapshot>(
-    // Replace 'pantry' with the name of your Firestore collection
-    stream: FirebaseFirestore.instance.collection('pantry').snapshots(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      }
-      if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      }
+    return StreamBuilder<QuerySnapshot>(
+      // Replace 'pantry' with the name of your Firestore collection
+      stream: FirebaseFirestore.instance.collection('pantry').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
 
-      // Clear the local pantryItems list to avoid duplicate entries
-      pantryItems.clear();
+        // Clear the local pantryItems list to avoid duplicate entries
+        pantryItems.clear();
 
-      // Add the items from Firestore to the local pantryItems list
-      for (DocumentSnapshot doc in snapshot.data!.docs) {
-        FoodItem item = FoodItem(
-          // Map the fields from Firestore to your FoodItem model
-          id: doc.id, // Assuming you use the document ID as the item ID
-          name: doc['name'],
-          quantity: doc['quantity'],
-          expiryDate: doc['expiryDate'].toDate(),
-          dateAdded: doc['dateAdded'].toDate(),
-          daysSinceAdded: 0,
-          daysUntilExpiry: 123,
-          isAddedRecently: true,
-          isExpired: false,
-          isExpiringSoon: false,
-        );
-        pantryItems.add(item);
-      }
+        // Add the items from Firestore to the local pantryItems list
+        for (DocumentSnapshot doc in snapshot.data!.docs) {
+          FoodItem item = FoodItem(
+            // Map the fields from Firestore to your FoodItem model
+            id: doc.id, // Assuming you use the document ID as the item ID
+            name: doc['name'],
+            quantity: doc['quantity'],
+            expiryDate: doc['expiryDate'].toDate(),
+            dateAdded: doc['dateAdded'].toDate(),
+            daysSinceAdded: 0,
+            daysUntilExpiry: 123,
+            isAddedRecently: true,
+            isExpired: false,
+            isExpiringSoon: false,
+          );
+          pantryItems.add(item);
+        }
 
       return ListView.builder(
         itemCount: pantryItems.length,

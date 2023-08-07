@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "176562682480",
+    "firebase_url": "https://stuff-f365d-default-rtdb.firebaseio.com",
     "project_id": "stuff-f365d",
     "storage_bucket": "stuff-f365d.appspot.com"
   },
@@ -14,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "176562682480-tkhob4puuo15aok3dt2gm9oposce2lot.apps.googleusercontent.com",
+          "client_id": "176562682480-do0ijjh5d59d5cr8svbjkkkso864fdua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pantry_app",
+            "certificate_hash": "11897d2ebb38cb2ddedb0108a7e5faa274860e6b"
+          }
+        },
+        {
+          "client_id": "176562682480-5n7j7dn0f71c9clo1u4ruc9f3g1rhe7q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +36,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "176562682480-tkhob4puuo15aok3dt2gm9oposce2lot.apps.googleusercontent.com",
+              "client_id": "176562682480-5n7j7dn0f71c9clo1u4ruc9f3g1rhe7q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "176562682480-hqdvkkib8s8tfm9e52g1mrsp6s4pd9tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pantryApp"
+              }
             }
           ]
         }

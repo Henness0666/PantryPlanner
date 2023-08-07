@@ -6,6 +6,7 @@ class ExpandableList<T extends ExpandableController> extends StatelessWidget {
   final Widget title;
   final Widget? subtitle;
   final List<Widget> children;
+  @override
   final Key? key;
 
   const ExpandableList({
