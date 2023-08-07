@@ -307,7 +307,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<void> signInWithEmail() async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
