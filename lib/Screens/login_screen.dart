@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pantry_app/Widgets/password_form_field.dart';
+import 'package:pantry_app/Widgets/provider_button.dart';
+import 'package:pantry_app/Widgets/svg_icon.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -26,7 +27,12 @@ class LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(40),
           child: Column(
             children: [
-              const SizedBox(height: 50),
+              const Image(
+                image: AssetImage('assets/images/logo.png'),
+                height: 200,
+                width: 200,
+              ),
+              const SizedBox(height: 10),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -58,7 +64,7 @@ class LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Implement registration functionality
+                      Navigator.pushNamed(context, '/register');
                     },
                     child: const Text('Register'),
                   ),
@@ -71,13 +77,7 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              TextFormField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
-                obscureText: true,
-              ),
+              PasswordFormField(controller: passwordController, labelText: 'Password'),
               const SizedBox(height: 20),
               Row(
                 children: [
@@ -91,37 +91,18 @@ class LoginScreenState extends State<LoginScreen> {
                   if (errorMessage.isEmpty) const Spacer(),
                   TextButton(
                     onPressed: () {
-                      // TODO: Implement forgot password functionality
+                      Navigator.pushNamed(context, '/forgot-password');
                     },
                     child: const Text('Forgot password?'),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              ProviderButton(
                 onPressed: () async {
                   await signInWithEmail();
                 },
-                style: ButtonStyle(
-                  // backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  // foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.all(14),
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          'Sign in',
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                text: 'Sign in',
               ),
               const SizedBox(height: 20),
               const Row(
@@ -145,104 +126,59 @@ class LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              ProviderButton(
                 onPressed: () async {
                   await signInWithGoogle();
                 },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.all(12),
-                  ),
+                text: 'Sign in with Google',
+                fontFamily: 'Roboto',
+                icon: const SvgIcon(
+                  asset: 'assets/icons/google.svg',
+                  useOriginalColors: true,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/g-logo.png', // Replace with the path to your Google logo
-                      height: 25.0,
-                    ),
-                    const Expanded(
-                      child: Center(
-                        child: Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                              fontFamily: 'Roboto', fontWeight: FontWeight.w400, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                buttonColor: Colors.white,
+                onButtonColor: Colors.black,
+                buttonColorDark: const Color(0xFF4285F4),
+                onButtonColorDark: Colors.white,
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
+              ProviderButton(
                 onPressed: () async {
                   await signInWithApple();
                 },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.all(12),
-                  ),
+                text: 'Sign in with Apple',
+                icon: const SvgIcon(
+                  asset: 'assets/icons/apple.svg',
                 ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Icon(
-                      FontAwesomeIcons.apple,
-                      size: 25.0,
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          'Sign in with Apple',
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                buttonColor: Colors.black,
+                onButtonColor: Colors.white,
+                buttonColorDark: Colors.white,
+                onButtonColorDark: Colors.black,
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
+              ProviderButton(
                 onPressed: () async {
                   await signInAnonymously();
                 },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.all(12),
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Icon(
-                      Icons.person, // Use the person icon
-                      size: 25.0,
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          'Sign in Anonymously',
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ],
+                text: 'Sign in Anonymously',
+                icon: const SvgIcon(
+                  asset: 'assets/icons/anonymous.svg',
                 ),
               ),
               const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'By signing in, you agree to our terms and conditions',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ),
+              Row(
+                children: [
+                  const Text(
+                    'By signing in, you agree to the',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/terms');
+                      },
+                      child: const Text('terms and conditions'))
+                ],
+              )
             ],
           ),
         ),
@@ -251,34 +187,64 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<UserCredential> signInWithGoogle() async {
-    // Trigger the Google Sign-In flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // If the sign-in was successful, get the credentials
-    if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      if (googleAuth.accessToken != null || googleAuth.idToken != null) {
-        // Create a new credential
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        // Once signed in, return the UserCredential
-        return await FirebaseAuth.instance.signInWithCredential(credential);
-      } else {
+      // If the sign-in was cancelled, throw an error
+      if (googleUser == null) {
         throw FirebaseAuthException(
-          code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
-          message: 'Missing Google Auth Token',
+          code: 'ERROR_ABORTED_BY_USER',
+          message: 'Sign-in aborted by user',
         );
       }
-    }
 
-    throw FirebaseAuthException(
-      code: 'ERROR_ABORTED_BY_USER',
-      message: 'Sign in aborted by user',
-    );
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        switch (e.code) {
+          case "account-exists-with-different-credential":
+            errorMessage = "The account already exists with a different credential.";
+            break;
+          case "invalid-credential":
+            errorMessage = "Error occurred while accessing credentials. Try again.";
+            break;
+          case "operation-not-allowed":
+            errorMessage = "Error occurred while accessing credentials. Try again.";
+            break;
+          case "user-disabled":
+            errorMessage = "Your account has been disabled. Please contact support.";
+            break;
+          case "user-not-found":
+            errorMessage = "User not found. Please register.";
+            break;
+          case "invalid-user-token":
+            errorMessage = "Error occurred while accessing credentials. Try again.";
+            break;
+          case "network-request-failed":
+            errorMessage = "Please check your internet connection and try again.";
+            break;
+          default:
+            errorMessage = "An undefined Error happened.";
+        }
+      });
+      // Re-throw the caught exception
+      rethrow;
+    } catch (e) {
+      // If the exception is not a FirebaseAuthException, handle it here
+      // You can either re-throw the exception or return a default value
+      rethrow;
+    }
   }
 
   Future<UserCredential> signInWithApple() async {
@@ -319,7 +285,7 @@ class LoginScreenState extends State<LoginScreen> {
       setState(() {
         switch (e.code) {
           case 'user-not-found':
-            errorMessage = 'No user found for that email.';
+            errorMessage = 'No user found for that email. Please register using the link above.';
             break;
           case 'wrong-password':
             errorMessage = 'Wrong password provided for that user.';

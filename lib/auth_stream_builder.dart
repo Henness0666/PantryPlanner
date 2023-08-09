@@ -109,7 +109,7 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                   ),
                 ),
               ),
-              drawer: SideMenu(),
+              drawer: const SideMenu(),
               body: PageView(
                 controller: _pageController,
                 children: widget.widgetOptions,
@@ -144,8 +144,8 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                       ),
                     ],
                     currentIndex: value,
-                    selectedItemColor: Colors.amber[800],
-                    unselectedItemColor: Colors.grey,
+                    selectedItemColor: Theme.of(context).colorScheme.secondary,
+                    unselectedItemColor: Theme.of(context).colorScheme.onSurface,
                     onTap: (index) {
                       _selectedIndex.value = index;
                       _pageController.jumpToPage(index);
@@ -155,7 +155,7 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
               ),
             );
           } else {
-            return LoginScreen(); // User is not signed in, show login screen
+            return const LoginScreen(); // User is not signed in, show login screen
           }
         }
       },
