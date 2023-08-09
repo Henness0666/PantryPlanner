@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pantry_app/Screens/forgot_password_screen.dart';
+import 'package:pantry_app/Screens/register_screen.dart';
+import 'package:pantry_app/Screens/terms_screen.dart';
 import 'package:pantry_app/auth_stream_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:pantry_app/dynamic_theme.dart';
@@ -148,6 +151,9 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/foodTracking': (context) => const FoodTrackingScreen(),
         '/nutritionAnalysis': (context) => const NutritionAnalysisScreen(),
         '/help': (context) => const HelpScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/forgot-password': (context) => const ForgotPasswordScreen(),
+        '/terms': (context) => const TermsScreen(),
       },
     );
   }

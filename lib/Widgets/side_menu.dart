@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({super.key});
+  const SideMenu({Key? key}) : super(key: key); // updated the key constructor
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +13,13 @@ class SideMenu extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                const DrawerHeader(
+                DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: Text(
                     'Menu',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                    style: Theme.of(context).primaryTextTheme.titleLarge,
                   ),
                 ),
                 ListTile(
@@ -43,7 +43,7 @@ class SideMenu extends StatelessWidget {
           ),
           Column(
             children: [
-              const Divider(), // optional
+              const Divider(),
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
@@ -51,7 +51,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsScreen(),
+                      builder: (context) => const SettingsScreen(),
                     ),
                   );
                 },
