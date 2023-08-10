@@ -12,6 +12,7 @@ class PantryScreen extends StatefulWidget {
 }
 
 class PantryScreenState extends State<PantryScreen> {
+  DatabaseServices db = DatabaseServices();
   final String _nextItemId = '0'; // Variable to keep track of the next item ID
   List<FoodItem> pantryItems = [];
 
@@ -134,7 +135,7 @@ class PantryScreenState extends State<PantryScreen> {
               trailing: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  deleteDataFromFirestore();
+                  db.deleteDataFromFirestore();
                 },
               ),
             ),
@@ -192,7 +193,7 @@ class PantryScreenState extends State<PantryScreen> {
       });
 
       // Add the item to Firestore using the Firestore emulator
-      addDataToFirestore(item);
+      db.addDataToFirestore(item);
     } else {
       // Display an error or show a snackbar indicating that all fields are required
     }
