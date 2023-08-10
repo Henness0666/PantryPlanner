@@ -21,10 +21,14 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double dpr = MediaQuery.of(context).devicePixelRatio;
+    double screenWidthInPx = MediaQuery.of(context).size.width * dpr;
+    double edgePadding = 10 + ((screenWidthInPx - 320) / (1440 - 320)) * 30;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(40),
+          padding: EdgeInsets.all(edgePadding),
           child: Column(
             children: [
               const Image(
@@ -54,21 +58,26 @@ class LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  const Text(
-                    'Don\'t have an account?',
-                    style: TextStyle(
-                      color: Colors.grey, // Set the color here
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Text(
+                      'Don\'t have an account?',
+                      style: TextStyle(
+                        color: Colors.grey, // Set the color here
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: const Text('Register'),
-                  ),
-                ],
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: const Text('Register'),
+                    ),
+                  ],
+                ),
               ),
               TextFormField(
                 controller: emailController,
@@ -166,18 +175,24 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  const Text(
-                    'By signing in, you agree to the',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  TextButton(
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Text(
+                      'By signing in, you agree to the',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/terms');
                       },
-                      child: const Text('terms and conditions'))
-                ],
+                      child: const Text('terms and conditions'),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

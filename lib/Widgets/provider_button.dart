@@ -67,10 +67,14 @@ class ProviderButton extends StatelessWidget {
         ),
       );
     } else if (chosenIcon is SvgIcon) {
-      leading = chosenIcon;
-      if (chosenIcon.isUsingOriginalColors) {
-        iconColor = Colors.transparent;
-      }
+      leading = (chosenIcon.isUsingOriginalColors)
+          ? chosenIcon // If using original colors, use the icon as is
+          : SvgIcon(
+              // If not using original colors, apply the iconColor
+              asset: chosenIcon.asset,
+              color: iconColor,
+              size: chosenIcon.size,
+            );
     } else if (chosenIcon != null) {
       leading = chosenIcon as Widget;
     }
