@@ -117,10 +117,21 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   void didChangePlatformBrightness() async {
     final themeChanger = Provider.of<ThemeChanger>(context, listen: false);
     final darkModePreference = await ThemeChanger.loadThemePreference();
-
     if (darkModePreference == DarkModeOption.system) {
       themeChanger.setSystemTheme();
     }
