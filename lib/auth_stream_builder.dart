@@ -38,6 +38,39 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
     super.dispose();
   }
 
+  Widget _buildFloatingActionButton() {
+    // Check if the current page is one of the desired pages
+    if ([0, 1, 3, 4].contains(_selectedIndex.value)) {
+      return FloatingActionButton(
+        onPressed: () {
+          _handleFloatingActionButtonPress();
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add),
+      );
+    }
+    return Container(); // Return null if the button shouldn't be displayed
+  }
+
+  void _handleFloatingActionButtonPress() {
+    switch (_selectedIndex.value) {
+      case 0: // Meal Planning
+        // TODO: Implement functionality for Meal Planning
+        break;
+      case 1: // Recipes
+        // TODO: Implement functionality for Recipes
+        break;
+      case 3: // Pantry
+        // TODO: Implement functionality for Pantry
+        break;
+      case 4: // Shopping List
+        // TODO: Implement functionality for Shopping List
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -151,6 +184,12 @@ class AuthStreamBuilderState extends State<AuthStreamBuilder> {
                       _pageController.jumpToPage(index);
                     },
                   );
+                },
+              ),
+              floatingActionButton: ValueListenableBuilder<int>(
+                valueListenable: _selectedIndex,
+                builder: (context, value, child) {
+                  return _buildFloatingActionButton();
                 },
               ),
             );

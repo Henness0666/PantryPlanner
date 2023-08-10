@@ -14,7 +14,7 @@ class DynamicTheme {
       onSurface: Colors.grey,
     ),
     iconTheme: const IconThemeData(
-      color: Colors.white,
+      color: Colors.grey,
     ),
     // other theme data for light mode
   );
@@ -27,7 +27,7 @@ class DynamicTheme {
       onPrimary: Colors.white, // Set the onPrimary color to black
     ),
     iconTheme: const IconThemeData(
-      color: Colors.white,
+      color: Colors.grey,
     ),
     // other theme data for dark mode
   );
