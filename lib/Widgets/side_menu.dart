@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_app/Screens/Settings/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({Key? key}) : super(key: key);
+  const SideMenu({Key? key}) : super(key: key); // updated the key constructor
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // Your drawer contents...
       child: Column(
         children: [
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                const DrawerHeader(
+                DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: Text(
                     'Menu',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                    style: Theme.of(context).primaryTextTheme.titleLarge,
                   ),
                 ),
                 ListTile(
@@ -43,13 +43,17 @@ class SideMenu extends StatelessWidget {
           ),
           Column(
             children: [
-              const Divider(), // optional
+              const Divider(),
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/settings');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -57,7 +61,7 @@ class SideMenu extends StatelessWidget {
                 title: const Text('Help & Feedback'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/about');
+                  Navigator.pushNamed(context, '/help');
                 },
               ),
             ],

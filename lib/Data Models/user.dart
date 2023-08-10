@@ -1,7 +1,5 @@
 // This class holds all user information for authentication and database access
 import 'package:pantry_app/Data%20Models/kitchen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PantryUser {

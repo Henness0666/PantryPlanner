@@ -7,7 +7,7 @@ class MealPlanningScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const BaseScreen(
-      title: 'Meal Planning',
+      title: 'Meal Plans',
       // The leading property defines the widget to display before the toolbar's title.
       // It is often used to display a back button.
       body: Center(
