@@ -1,6 +1,6 @@
 // This class will hold various items and storage locations within a kitchen or another storage location
 // Initialize the class
-import 'package:pantry_app/Data%20Models/inventory_item.dart';
+import 'package:pantry_app/Models/inventory_item.dart';
 
 class StorageLocation {
   //Storage location database holds items

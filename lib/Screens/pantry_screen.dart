@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pantry_app/Data%20Models/database.dart';
+import 'package:pantry_app/Models/database.dart';
 import '../Widgets/base_screen.dart';
-import '../Data Models/inventory_item.dart';
+import '../Models/inventory_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PantryScreen extends StatefulWidget {
@@ -135,7 +135,7 @@ class PantryScreenState extends State<PantryScreen> {
               trailing: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  db.deleteDataFromFirestore();
+                  db.deleteIngredientFromFirestore();
                 },
               ),
             ),
@@ -193,7 +193,7 @@ class PantryScreenState extends State<PantryScreen> {
       });
 
       // Add the item to Firestore using the Firestore emulator
-      db.addDataToFirestore(item);
+      db.addIngredientToFirestore(item);
     } else {
       // Display an error or show a snackbar indicating that all fields are required
     }

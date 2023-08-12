@@ -1,5 +1,5 @@
-import '/Data%20Models/inventory_item.dart';
-import '/Data%20Models/storage_location.dart';
+import '/Models/inventory_item.dart';
+import '/Models/storage_location.dart';
 
 //initialization of the class to start a users local collection of food items
 class Kitchen {
