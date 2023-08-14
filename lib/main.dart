@@ -105,7 +105,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     RecipesScreen(), // Notifications Screen
     const ActivityFeedScreen(), // Home/Dashboard Screen
     const PantryScreen(), // Pantry Screen
-    const ShoppingListScreen(), // Shopping List Screen
+    ShoppingListScreen(), // Shopping List Screen
   ];
 
   final List<String> _pageTitleOptions = [
